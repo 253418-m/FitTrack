@@ -1,0 +1,47 @@
+*.iml
+.gradle/
+.kotlin/
+.idea/
+local.properties
+build/
+dist/
+captures/
+.externalNativeBuild/
+.cxx/
+.DS_Store
+
+# Python and local backend state
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+.env
+.env.*
+!.env.example
+*.log
+backups/
+*dump*.sql
+*.dump
+*.backup
+
+# Local credentials and signing material
+.aws/
+backend/secrets/
+firebase-adminsdk*.json
+*service-account*.json
+*.jks
+*.keystore
+*.pem
+*.p12
+*.pfx
+*.key
+
+# Generated Android packages
+*.apk
+*.aab
+
+# Instructor material retained locally
+/docs/Presentacion_Integracion_Hardware.pdf
