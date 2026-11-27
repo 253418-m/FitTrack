@@ -1,8 +1,8 @@
 # Arquitectura propuesta
 
-## Estado real de etapa 01
+## Estado real
 
-Un módulo Android `app` con Compose y pantalla de arranque; Hilt/KSP configurados. Backend FastAPI independiente con `GET /health`. No existen ViewModels de negocio, repositorios, base de datos, sesión ni rutas de negocio.
+Un módulo Android `app` con Compose y pantalla de arranque; Hilt/KSP configurados. MainActivity únicamente aloja FitTrackApp bajo FitTrackTheme. El tema único y sus tokens están en `ui/theme`; los componentes reutilizables y previews en `core/designsystem`. El sistema de diseño recibe estado y callbacks, sin dependencias hacia features. Backend FastAPI independiente con `GET /health`. No existen ViewModels de negocio, repositorios, base de datos, sesión ni rutas de negocio.
 
 ## Android, etapas futuras
 

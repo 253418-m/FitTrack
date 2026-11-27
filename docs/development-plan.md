@@ -1,11 +1,11 @@
 # Plan incremental FitTrack v5.0
 
-Etapa 01 en **revisión final**; etapas 02–22 pendientes. Responsable actual: 253418-m; siguiente: 253699-bot después de revisión e integración Git autorizada. `main` conserva versiones estables y `develop` integra etapas revisadas. Cada etapa usa su rama de trabajo propuesta desde `develop` actualizado. Las ramas no existen aún en este workspace, que no tiene repositorio Git. Los commits deben representar contribuciones reales de cada integrante.
+Etapa 01 **completada y publicada** en GitHub con commit `16f05f788efcbd199278d0291d2e90f7b7974693`. Existen `main`, `develop` y `chore/project-bootstrap`; `main` es estable y `develop` integra etapas revisadas. La fase 02.1 (mockups) está completada; la fase 02.2 (sistema de diseño) tuvo validación local previa en `feat/design-system`. La revisión 02.3 aprobó compilación, 3 pruebas unitarias, lint y 11 pruebas instrumentadas actuales; el arranque se verificó en Pixel 10 Pro XL AVD. La implementación está validada localmente; la publicación e integración Git permanecen pendientes. Las etapas 03–22 permanecen pendientes. Los commits deben representar contribuciones reales.
 
 | Etapa | Responsable | Rama | Dependencias | Entrega | Criterio de aceptación | Estado |
 |---|---|---|---|---|---|---|
-| 01 Base | 253418-m | `chore/project-bootstrap` | Plantilla Android | Android/FastAPI base, MainActivity SRP y documentación v5.0 | Compilación, pruebas, lint, health y documentos verificados | En revisión final |
-| 02 Diseño | 253699-bot | `feat/design-system` | 01; referencia visual | 24 vistas planificadas y sistema visual | Estados, accesibilidad e identidad revisados | Pendiente |
+| 01 Base | 253418-m | `chore/project-bootstrap` | Plantilla Android | Android/FastAPI base, MainActivity SRP y documentación v5.0 | Compilación, pruebas, lint, health y documentos verificados | Completada y publicada |
+| 02 Diseño | 253699-bot | `feat/design-system` | 01; referencia visual | 24 vistas planificadas y sistema visual | Estados, accesibilidad e identidad revisados | 02.1 completada; 02.2 implementada; 02.3 validada localmente, pendiente de publicación e integración |
 | 03 Backend auth | 253699-bot | `feat/backend-auth` | 01 | PostgreSQL local, Alembic, usuarios y JWT | Registro, login, permisos y migraciones probados | Pendiente |
 | 04 Android auth | 253418-m | `feat/android-auth` | 02, 03 | Retrofit, sesión, login y roles | Integración local, token protegido y navegación probados | Pendiente |
 | 05 Backend coaching | 253418-m | `feat/backend-coaching` | 03 | Búsqueda, solicitudes, vínculos y permisos | Cardinalidad, autorización y concurrencia probadas | Pendiente |
@@ -27,4 +27,4 @@ Etapa 01 en **revisión final**; etapas 02–22 pendientes. Responsable actual: 
 | 21 AWS | 253699-bot | `chore/aws-deployment` | 20; laboratorio y autorización | EC2, PostgreSQL, HTTPS y presupuesto | Backend, FCM, outbox, Android y respaldo verificados | Pendiente |
 | 22 Aceptación | 253418-m | `test/final-acceptance` | 21 | E2E, hardware físico, push y evidencia | Criterios oficiales y flujos completos comprobados | Pendiente |
 
-Cada integrante tiene **11 etapas**. Ambos revisan e integran mediante operaciones Git autorizadas, sin atribuir contribuciones ajenas. El cambio de responsable ocurre después de revisar e integrar la etapa anterior; no inicia la etapa 02 automáticamente.
+Cada integrante tiene **11 etapas**. Ambos revisan e integran mediante operaciones Git autorizadas, sin atribuir contribuciones ajenas. El cambio de responsable tras etapa 01 fue autorizado. La etapa 03 sigue pendiente y corresponde también a 253699-bot; no inicia automáticamente.

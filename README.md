@@ -1,6 +1,6 @@
 # FitTrack
 
-Aplicación Android nativa en español y API REST propia para hábitos saludables, calculadora corporal y rutinas entre entrenadores y atletas. Este monorepositorio está en la **etapa 01: estructura local inicial**. Solo existe una pantalla Android temporal y el endpoint técnico `GET /health`; las funciones de negocio aún no están implementadas.
+Aplicación Android nativa en español y API REST propia para hábitos saludables, calculadora corporal y rutinas entre entrenadores y atletas. La etapa 01 está completada y publicada. La fase 02.1 de mockups está completada y la fase 02.2 del sistema de diseño tuvo validación local previa. La revisión 02.3 aprobó 11 pruebas instrumentadas actuales y verificó el arranque tras ajustes puntuales; la publicación e integración Git están pendientes. Solo existe una pantalla Android temporal y el endpoint técnico `GET /health`; las funciones de negocio aún no están implementadas.
 
 ## Organización y alcance
 
@@ -20,7 +20,7 @@ Windows con Android Studio, JDK compatible con AGP 9.5.2 y SDK 37. Se reutiliza 
 .\gradlew.bat :app:lintDebug --console=plain
 ```
 
-MainActivity aloja FitTrackApp, que muestra únicamente “FitTrack”. El tema visual definitivo y la navegación por roles corresponden a etapas posteriores.
+MainActivity aloja FitTrackApp, que muestra únicamente la identidad temporal de FitTrack. El tema oscuro y los componentes base de la etapa 02.2 aprobaron compilación, lint, pruebas unitarias e instrumentadas y arranque en la revisión 02.2 previa; tras los ajustes 02.3 aprobaron compilación, 3 pruebas unitarias, lint y 11 pruebas instrumentadas; el arranque actual se verificó en Pixel 10 Pro XL AVD; la navegación funcional y las pantallas por rol corresponden a etapas posteriores.
 
 ## Entorno backend
 
@@ -37,6 +37,7 @@ La etapa 21 prevé una sola instancia Amazon EC2 con Ubuntu, FastAPI/Uvicorn, Po
 - [Modelo de datos](docs/data-model.md)
 - [Contrato API](docs/api-contract.md)
 - [Inventario de mockups](docs/design/mockup-inventory.md)
+- [Sistema de diseño](docs/design/design-system.md)
 - [Plan de desarrollo](docs/development-plan.md)
 - [Cobertura académica](docs/course-coverage.md)
 - [Decisiones y pendientes](docs/decisions.md)
@@ -44,7 +45,7 @@ La etapa 21 prevé una sola instancia Amazon EC2 con Ubuntu, FastAPI/Uvicorn, Po
 - [Notificaciones planificadas](docs/notifications.md)
 - [Despliegue AWS previsto](docs/aws-deployment.md)
 
-La presentación de hardware sí está en docs/; el PDF de mockups y otros documentos docentes citados no están disponibles localmente. No se atribuye contenido adicional a esas fuentes.
+El PDF aprobado, las exportaciones SVG/PNG y el material docente están en el directorio local hermano `FitTrack-references` y permanecen fuera del repositorio. Su inspección efectiva se registra en la documentación de diseño.
 
 ## Contexto rector v5.0
 
