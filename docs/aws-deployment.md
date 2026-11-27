@@ -1,5 +1,7 @@
 # Despliegue AWS previsto para la etapa 21
 
+**Estado vigente 03.R.4 (27-11-2026):** alcance v5.1 aprobado expresamente por el usuario mediante D01–D11, registradas en [decisiones](decisions.md). Las menciones anteriores a aprobación pendiente de esas decisiones son históricas y quedan sustituidas por este registro. Funcionalidades futuras: PLANNED; aprobación de alcance no acredita implementación, pruebas ni aprobación docente. Cobertura visual global parcial; verificaciones externas pendientes.
+
 **Estado actual: NO DESPLEGADO.** En etapa 01 no se consultaron credenciales ni se crearon recursos AWS. Laboratorio académico universitario: presupuesto total de **50 USD**. Ningún precio actual se considera conocido. El tipo de instancia está por seleccionar; `t3.small` es solo una opción pendiente de restricciones, rendimiento y costo.
 
 ## Topología prevista
@@ -46,3 +48,9 @@ Amazon RDS, Aurora, ECS, EKS, Lambda como reemplazo de FastAPI, API Gateway inne
 ## Notificaciones futuras
 
 Firebase Admin SDK y un procesador sencillo del outbox se añadirán durante la etapa 17. Credenciales privadas fuera de Git; verificar salida HTTPS a FCM, reintentos e idempotencia. No usar Redis, Celery, RabbitMQ ni RDS. Sin recursos creados durante esta revisión.
+
+## Requisitos de seguridad para el alcance v5.1 propuesto
+
+La URL HTTPS pública sigue **pendiente**. Mantener EC2 Ubuntu, Nginx → Uvicorn/FastAPI vía localhost, PostgreSQL local restringido, systemd y certificado TLS válido; sin RDS. Restringir SSH y 5432 a orígenes autorizados, verificar firewall y `pg_hba.conf` antes de afirmar aislamiento externo. El servidor PostgreSQL local previo escuchaba en varias interfaces; escucha no demuestra exposición a Internet. No se cambian servicios en esta etapa.
+
+Guardar JWT, base de datos y credenciales Firebase Admin fuera de Git; separar entorno y copias de seguridad, probar restauración. Antes de publicar: control de intentos repetidos de login y Contactame, autorización 401/403 en recursos reales, HTTPS, monitoreo y presupuesto académico de 50 USD. Ningún recurso AWS/Firebase ni dominio fue creado durante 03.R.2.
