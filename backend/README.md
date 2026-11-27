@@ -1,6 +1,8 @@
 # Backend local de FitTrack
 
-**Estado de etapa 03:** backend implementado y validado localmente, pendiente de revisión y commit. `GET /health` sigue comprobando solo el proceso. Las rutas de autenticación y la migración se validaron sobre PostgreSQL 18.6.
+**Estado vigente 03.R.4 (27-11-2026):** alcance v5.1 aprobado expresamente por el usuario mediante D01–D11, registradas en [decisiones](../docs/decisions.md). Las menciones anteriores a aprobación pendiente de esas decisiones son históricas y quedan sustituidas por este registro. Funcionalidades futuras: PLANNED; aprobación de alcance no acredita implementación, pruebas ni aprobación docente. Cobertura visual global parcial; verificaciones externas pendientes.
+
+**Estado de etapa 03:** backend implementado, validado localmente e integrado en `develop` mediante PR #2. `GET /health` sigue comprobando solo el proceso. Las rutas de autenticación y la migración se validaron sobre PostgreSQL 18.6.
 
 ## Requisitos e instalación
 
@@ -69,3 +71,7 @@ La primera ejecución sobre `fittrack_test` vacía aprobó 48 pruebas, incluido 
 Contraseñas Argon2id (19 MiB, 2 iteraciones, paralelismo 1), JWT HS256 con `sub` UUID, `iat`, `exp`, `iss` y `aud`. Registro y login limitan la contraseña a 128 caracteres sin truncarla ni normalizarla; SQLAlchemy oculta parámetros en sus errores. `PublicUser` incluye email solo para usuario autenticado: los futuros perfiles públicos necesitan otro esquema sin email. La clave se obtiene del entorno, nunca del repositorio. Los JWT duran 30 minutos por defecto; no hay refresh ni revocación inmediata. El cliente debe volver a autenticarse al expirar. La API no expone hashes, tokens en URL ni trazas. Se necesita protección frente a intentos repetidos de login antes del despliegue. Las pruebas HTTP reales validaron 201, 200, 409, 422 y 401; dos usuarios ficticios `example.com` permanecen en `fittrack_dev` como datos de demostración. No se borraron usuarios existentes.
 
 La evidencia técnica redactada se guardó localmente en el directorio hermano `FitTrack-references/evidence/stage-03/validation.txt`, fuera del repositorio. El despliegue en EC2 corresponde a la etapa 21. No hay recursos AWS/Firebase creados.
+
+## Estado de integración y alcance documental v5.1
+
+La etapa 03 quedó integrada en `develop` mediante [PR #2](https://github.com/253418-m/FitTrack/pull/2), merge `12df7874276bece8e682a5540806238f2145fff1`. El backend implementado conserva solo `GET /health`, `POST /api/v1/auth/register`, `POST /api/v1/auth/login` y `GET /api/v1/users/me`. Las rutas de [contrato futuro](../docs/api-contract.md) están etiquetadas como planificadas o propuestas y no aparecen aún en Swagger. Room será una copia local Android de rutinas, con PostgreSQL como fuente de verdad; no requiere cambios en el backend de autenticación ya validado. Esta actualización documental no ejecutó pruebas nuevas ni despliegue.

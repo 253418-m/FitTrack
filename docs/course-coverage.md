@@ -1,18 +1,20 @@
-# Cobertura académica FitTrack v5.0
+# Cobertura académica FitTrack · alcance v5.1 aprobado
+
+**Estado vigente 03.R.4 (27-11-2026):** alcance v5.1 aprobado expresamente por el usuario mediante D01–D11, registradas en [decisiones](decisions.md). Las menciones anteriores a aprobación pendiente de esas decisiones son históricas y quedan sustituidas por este registro. Funcionalidades futuras: PLANNED; aprobación de alcance no acredita implementación, pruebas ni aprobación docente. Cobertura visual global parcial; verificaciones externas pendientes.
 
 **Evidencia existente de etapa 01:** MainActivity delega la UI a FitTrackApp (SRP); la revisión previa reportó compilación Android, una prueba unitaria, lint, dos pruebas backend de health, pip check y compileall satisfactorios. Esa evidencia no demuestra funcionalidades futuras ni cumplimiento de rúbrica. Registrar archivos, pruebas y resultados reales conforme se ejecuten las etapas.
 
 | Fuente | Aplicación prevista | Etapa y evidencia pendiente |
 |---|---|---|
 | Evaluación I | Calculadora local: Compose, ViewModel, StateFlow, funciones puras y sliders | 12; fórmulas y UI |
-| Evaluación II | Hábitos fijos, DataStore, Flow, rachas, pasos por sesiones y recordatorios | 11, 16, 19; fechas, aislamiento, sensor y trabajos |
+| Evaluación II | Propuesta P03: hábitos remotos, DataStore auxiliar, Flow, pasos por sesiones y recordatorios Should | 11.A/B, 16, 19; fecha, aislamiento, sensor y trabajos |
 | Evaluación III | API REST, JWT, PostgreSQL, Hilt/Retrofit, vínculos, CRUD y notificaciones remotas | 03–10, 13, 17–18, 20–22; backend, red, UI, seguridad y E2E |
 | Android Basics 1 | Kotlin, recursos, estructura Android, Compose y SRP de MainActivity | 01; evidencia local previa de compilación y código |
 | Android Basics 2 | Estado, formularios, validaciones y pruebas de lógica | 04, 10, 12; pruebas pendientes |
 | Android Basics 3 | Colecciones, LazyColumn, Material y accesibilidad | 02: tema, componentes, tipografía y previews implementados; listas y pantallas completas pendientes en 06–12 |
 | Android Basics 4 | ViewModel, Lifecycle, StateFlow, navegación tipada y UDF | 04–12, 18; pruebas de navegación/estado pendientes |
 | Android Basics 5 | Corrutinas, Retrofit, JSON, repositorios, errores y Hilt | 04–10, 17–18; MockWebServer e integración pendientes |
-| Android Basics 6 | Preferences DataStore; integridad relacional en PostgreSQL backend | 03–04, 11, 16, 19; almacenamiento y aislamiento pendientes |
+| Android Basics 6 | Preferences DataStore, Room para rutinas offline e integridad PostgreSQL remota | 03–04, 09.B, 11, 16, 19; aislamiento y sincronización pendientes |
 | Android Basics 7 | WorkManager para recordatorios configurables de hábitos | 19; programación, fecha y cancelación pendientes |
 | Android Basics 8 | Interoperabilidad Views/Compose | No requerida para la UI declarativa; revisar compatibilidad de BiometricPrompt en 15 |
 
@@ -29,6 +31,10 @@
 | AWS | 21 | EC2 única, PostgreSQL, HTTPS, presupuesto y respaldo |
 | Aceptación final | 22 | E2E, dispositivos, criterios oficiales y evidencias |
 
-La fase 02.2 aporta evidencia local previa de Compose, Material 3, state hoisting, tema oscuro, tipografía, previews y accesibilidad: 3 pruebas unitarias y 11 instrumentadas aprobadas en Pixel 10 Pro XL AVD, render de previews y arranque real verificado antes de los ajustes 02.3. En la revisión 02.3 aprobaron compilación, 3 pruebas unitarias, lint y 11 pruebas instrumentadas actuales en Pixel 10 Pro XL AVD; el arranque tras los ajustes se verificó visualmente. La prueba de contraseña ahora comprueba el texto enmascarado en `EditableText` y los botones deshabilitados reciben una pulsación táctil de prueba. Esta evidencia cubre el sistema de diseño; no demuestra pantallas funcionales ni cumplimiento completo de la rúbrica. La rúbrica oficial de Unidad 4 exige Room con SQLite y consulta offline de un recurso. PostgreSQL sigue siendo la base relacional remota y DataStore conserva sesión y preferencias; la implementación de Room queda pendiente de planificación aprobada. No declarar cobertura académica completa sin criterios oficiales del docente y pruebas ejecutadas.
+La fase 02.2 aporta evidencia local previa de Compose, Material 3, state hoisting, tema oscuro, tipografía, previews y accesibilidad: 3 pruebas unitarias y 11 instrumentadas aprobadas en Pixel 10 Pro XL AVD, render de previews y arranque real verificado antes de los ajustes 02.3. En la revisión 02.3 aprobaron compilación, 3 pruebas unitarias, lint y 11 pruebas instrumentadas actuales en Pixel 10 Pro XL AVD; el arranque tras los ajustes se verificó visualmente. La prueba de contraseña ahora comprueba el texto enmascarado en `EditableText` y los botones deshabilitados reciben una pulsación táctil de prueba. Esta evidencia cubre el sistema de diseño; no demuestra pantallas funcionales ni cumplimiento completo de la rúbrica. La rúbrica oficial de Unidad 4 exige Room con SQLite y consulta offline de un recurso. PostgreSQL sigue siendo la base relacional remota y DataStore conserva sesión y preferencias; la implementación de Room queda planificada y aprobada, pendiente de implementación. No declarar cobertura académica completa sin criterios oficiales del docente y pruebas ejecutadas.
 
 **Etapa 03, evidencia actual:** FastAPI modular, SQLAlchemy 2, Alembic, Argon2id, JWT y Pydantic validados con PostgreSQL 18.6 local. La primera suite sobre `fittrack_test` vacía aprobó 48 pruebas sin omisiones, incluidas migración upgrade/downgrade/upgrade, unicidad concurrente y ambos roles. La repetición tras corregir Alembic y las pruebas de seguridad aprobó 47 con 1 omisión deliberada del segundo downgrade sobre una base ya migrada; no hubo fallos ni advertencia Starlette/httpx. `pip check`, `compileall`, `alembic check` y HTTP local de registro, login y `users/me` satisfactorios. La regresión Android anterior de etapa 03.1 aprobó assembleDebug, 3 pruebas unitarias y lint (0 errores, 12 advertencias); no se modificó Android en esta revisión. La etapa 02 quedó integrada en `develop` mediante PR #1 y merge commit `581bc52523dace75d55b7cedee4c13c05064ef16`. La integración Android de autenticación sigue pendiente para etapa 04. La evidencia técnica redactada está en el directorio local hermano `FitTrack-references/evidence/stage-03/validation.txt`, fuera del repositorio.
+
+## Cobertura oficial propuesta v5.1
+
+La fuente vigente para los nueve criterios es [trazabilidad de rúbrica](rubric-compliance.md), contrastada con `Proyecto_Unidad4_App_MVP.pdf` y `Rubrica_Proyecto_Unidad4.pdf`. Las exclusiones históricas de Room quedan sustituidas: Room con consulta offline es obligatorio. Contactame, tres procesos completos, FCM, tres hardware y pruebas Android específicas siguen pendientes. El backend de etapa 03 fue integrado con PR #2; sus pruebas locales no equivalen a CI ni demuestran cumplimiento integral de la aplicación. La diferencia entre 40 puntos de portada y pesos analíticos de 100 se documenta sin inventar conversión.
