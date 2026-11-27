@@ -1,14 +1,14 @@
 # FitTrack
 
-Aplicación Android nativa en español y API REST propia para hábitos saludables, calculadora corporal y rutinas entre entrenadores y atletas. La etapa 01 está completada y publicada. La fase 02.1 de mockups está completada y la fase 02.2 del sistema de diseño tuvo validación local previa. La revisión 02.3 aprobó 11 pruebas instrumentadas actuales y verificó el arranque tras ajustes puntuales; la publicación e integración Git están pendientes. Solo existe una pantalla Android temporal y el endpoint técnico `GET /health`; las funciones de negocio aún no están implementadas.
+Aplicación Android nativa en español y API REST propia para hábitos saludables, calculadora corporal y rutinas entre entrenadores y atletas. La etapa 01 está completada y publicada. La etapa 02 de diseño se completó e integró en `develop` mediante el PR #1 (merge commit `581bc52523dace75d55b7cedee4c13c05064ef16`). La etapa 03 implementó y validó localmente el backend de registro, login y usuario actual sobre PostgreSQL 18.6; la migración `users` y las pruebas de integración pasaron. La etapa permanece sin commit ni publicación. Android conserva solo la pantalla temporal.
 
 ## Organización y alcance
 
 - `app/`: Android Kotlin, Compose, Material 3 y base de Hilt/KSP. Un módulo Gradle.
-- `backend/`: FastAPI local con prueba del endpoint de salud.
+- `backend/`: FastAPI con autenticación, usuario, PostgreSQL y Alembic validados localmente.
 - `docs/`: requisitos y arquitectura objetivo. Sus endpoints, entidades y vistas son propuestas hasta que se implementen y prueben.
 
-Ambos roles, `ATHLETE` y `TRAINER`, compartirán la aplicación, la API y PostgreSQL. Android solo accederá a los datos remotos por HTTPS a través de la API. Los hábitos serán locales mediante DataStore; la calculadora funcionará en memoria. No se utilizarán Room, RDS ni servicios distribuidos.
+Ambos roles, `ATHLETE` y `TRAINER`, compartirán la aplicación, la API y PostgreSQL. Android solo accederá a los datos remotos por HTTPS a través de la API. Los hábitos serán locales mediante DataStore; la calculadora funcionará en memoria. La planificación anterior excluía Room; la rúbrica oficial de Unidad 4 exige incorporarlo en una etapa Android posterior. RDS y servicios distribuidos siguen fuera del alcance.
 
 ## Entorno Android
 
@@ -24,7 +24,7 @@ MainActivity aloja FitTrackApp, que muestra únicamente la identidad temporal de
 
 ## Entorno backend
 
-Consultar [backend/README.md](backend/README.md) para crear el entorno virtual, instalar dependencias, ejecutar FastAPI y correr Pytest. `GET /health` solo indica disponibilidad del proceso.
+Consultar [backend/README.md](backend/README.md) para configurar bases y roles locales exclusivos, variables protegidas, entorno virtual, Alembic, FastAPI y Pytest. `GET /health` solo indica disponibilidad del proceso. El componente backend de RF-01 y RF-02 se validó contra PostgreSQL local; la autenticación y sesión Android corresponden a la etapa 04.
 
 ## Despliegue futuro
 
@@ -49,4 +49,4 @@ El PDF aprobado, las exportaciones SVG/PNG y el material docente están en el di
 
 ## Contexto rector v5.0
 
-Se planifican 46 requisitos funcionales, 24 referencias de diseño y 22 etapas equilibradas entre 253418-m y 253699-bot. Son obligatorios el contador de pasos por SensorManager, biometría opcional por AndroidX Biometric, vibración háptica, push FCM con FastAPI/PostgreSQL como autoridad, y recordatorios locales WorkManager. Estas funciones aún no están implementadas. Ver [requisitos](docs/requirements.md), [arquitectura](docs/architecture.md) y [plan](docs/development-plan.md).
+Se planifican 46 requisitos funcionales, 24 referencias de diseño y 22 etapas equilibradas entre 253418-m y 253699-bot. Son obligatorios el contador de pasos por SensorManager, biometría opcional por AndroidX Biometric, vibración háptica, push FCM con FastAPI/PostgreSQL como autoridad, y recordatorios locales WorkManager. Las funciones de hardware y notificaciones aún no están implementadas. Ver [requisitos](docs/requirements.md), [arquitectura](docs/architecture.md) y [plan](docs/development-plan.md).

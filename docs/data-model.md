@@ -1,6 +1,8 @@
-# Modelo relacional preliminar
+# Modelo relacional de FitTrack
 
-**Estado:** propuesta para PostgreSQL; no existen tablas ni migraciones en etapa 01. Desarrollo y pruebas usarán PostgreSQL local/aislado; producción usará PostgreSQL dentro de la misma EC2 que FastAPI, nunca RDS.
+**Estado:** la etapa 03 añadió el modelo SQLAlchemy y la migración Alembic `bd7cce2c8602` únicamente para `users`. Se aplicó y comprobó en PostgreSQL 18.6 local sobre `fittrack_dev` y `fittrack_test`, con roles propietarios separados y sin acceso cruzado. Las restantes entidades siguen planificadas. Desarrollo y pruebas usarán PostgreSQL local/aislado; producción usará PostgreSQL dentro de la misma EC2 que FastAPI, nunca RDS.
+
+`users`: UUID generado por servidor; `username` y `email` únicos en base y normalizados por API; `name` no único; `password_hash` Argon2id; `role` limitado por CHECK a `ATHLETE` o `TRAINER`; `created_at` y `updated_at` son `TIMESTAMPTZ` UTC asignados por servidor. No se ejecuta `create_all` ni migración al importar la aplicación.
 
 | Entidad | Clave y campos propuestos | Relaciones y restricciones |
 |---|---|---|

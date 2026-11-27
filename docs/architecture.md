@@ -2,7 +2,7 @@
 
 ## Estado real
 
-Un módulo Android `app` con Compose y pantalla de arranque; Hilt/KSP configurados. MainActivity únicamente aloja FitTrackApp bajo FitTrackTheme. El tema único y sus tokens están en `ui/theme`; los componentes reutilizables y previews en `core/designsystem`. El sistema de diseño recibe estado y callbacks, sin dependencias hacia features. Backend FastAPI independiente con `GET /health`. No existen ViewModels de negocio, repositorios, base de datos, sesión ni rutas de negocio.
+Un módulo Android `app` con Compose y pantalla de arranque; Hilt/KSP configurados. MainActivity únicamente aloja FitTrackApp bajo FitTrackTheme. El tema único y sus tokens están en `ui/theme`; los componentes reutilizables y previews en `core/designsystem`. El sistema de diseño recibe estado y callbacks, sin dependencias hacia features. Backend FastAPI independiente con `GET /health` y módulos `core`, `db`, `auth`, `users` para la etapa 03. Existen modelo, repositorio y servicios de autenticación, además de Alembic; la migración `users` y la integración PostgreSQL fueron validadas localmente en bases aisladas. La etapa 03 aún no está publicada. No existen ViewModels Android de negocio ni sesión Android.
 
 ## Android, etapas futuras
 
@@ -10,11 +10,11 @@ MVVM y Clean Architecture ligera, dentro del módulo `app`, organizada por `core
 
 Navigation Compose de rutas tipadas: grafos Auth, Athlete y Trainer, una Activity, RootViewModel y back stack protegido. La calculadora se comparte, sin capa data. `viewModelScope`, funciones `suspend`, cancelación cooperativa y manejo tipado de errores. Retrofit 3, OkHttp y kotlinx.serialization se añadirán cuando exista comunicación remota; AuthInterceptor no leerá DataStore con `runBlocking`. Hilt enlazará contratos e implementaciones cuando existan.
 
-Fuentes de verdad: API/PostgreSQL para usuarios, solicitudes, vínculos y rutinas; Preferences DataStore por usuario/fecha para hábitos y para metadatos de sesión (token protegido con Keystore); memoria de ViewModel para calculadora. No Room ni caché offline de rutinas.
+Fuentes de verdad: API/PostgreSQL para usuarios, solicitudes, vínculos y rutinas; Preferences DataStore por usuario/fecha para hábitos y para metadatos de sesión (token protegido con Keystore); memoria de ViewModel para calculadora. Esta exclusión de Room es histórica: la rúbrica oficial de Unidad 4 exige caché local consultable sin conexión; su diseño se abordará en una operación posterior, sin cambios en el backend de etapa 03.
 
-## Backend, etapas futuras
+## Backend actual y futuro
 
-FastAPI como monolito modular: `auth`, `users`, `coaching`, `routines`; `core` para seguridad/configuración y `db` para PostgreSQL. Routers definen HTTP y validación; services coordinan reglas y transacciones; repositories ejecutan persistencia; schemas representan el contrato, models la base. Crear archivos solo cuando se implemente cada módulo. PostgreSQL local para desarrollo y pruebas aisladas; Alembic versionará migraciones desde etapa 03.
+FastAPI es un monolito modular. `main.py` compone routers y errores; `core` concentra configuración, Argon2id, JWT y errores; `db` crea engine y sesión por solicitud; `auth` separa router, schemas, servicio y dependencias; `users` separa modelo, repositorio, schema público y router. Los endpoints síncronos de DB/hash se ejecutan como `def` mediante el threadpool de FastAPI. Alembic versiona `users` con revisión `bd7cce2c8602`. La configuración se carga del entorno sin secreto predeterminado; SQLAlchemy oculta parámetros en errores. `PublicUser` contiene email para identidad autenticada y no debe reutilizarse como perfil público de entrenador. `coaching` y `routines` permanecen planificados y no tienen módulos vacíos.
 
 ## Despliegue futuro
 
