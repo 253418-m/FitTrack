@@ -1,32 +1,43 @@
-# Inventario de vistas para actualización en etapa 02
+# Inventario de mockups aprobados · FitTrack v5.0
 
-Referencia declarada: `FitTrack · Mockups MVP (2).pdf`. El PDF no está en este workspace; se registra el inventario aportado por el propietario, sin afirmar inspección visual ni colores exactos. Tema oscuro, superficies grises, rojo de acción, texto claro y navegación inferior son requisitos; mockups definitivos aún no aprobados.
+Referencia principal local (fuera del repositorio): `MockupsFitTrack.pdf` en el directorio hermano `FitTrack-references`. Contiene **27 páginas**, **24 vistas únicas**, dos variantes adicionales (páginas 1 y 5) y una página de cinco ejemplos de notificaciones (página 25). Las exportaciones `mockups/svg/` y `mockups/png/` están disponibles en el mismo directorio. Estos archivos no se versionan ni se usan como pantallas de producción.
 
-| # | Vista | Rol | Cambio o estado necesario |
-|---|---|---|---|
-| 01 | Login | Ambos | Conservar referencia original; errores de credenciales/red. |
-| 02 | Registro | Ambos | Agregar username, rol y errores junto al campo. |
-| 03 | Hoy | Atleta | Hábitos, progreso, rachas y navegación inferior actualizada. |
-| 04 | Calculadora | Ambos | Fórmulas y navegación según rol; resultados estimados. |
-| 05 | Mis rutinas atleta | Atleta | Rutinas del vínculo activo y estado sin entrenador. |
-| 06 | Detalle rutina atleta | Atleta | Solo lectura. |
-| 07 | Mis rutinas entrenador | Entrenador | Propias, atleta asignado y vínculo terminado. |
-| 08 | Mis atletas | Entrenador | Solo activos; incorporar solicitudes recibidas. |
-| 09 | Detalle rutina entrenador | Entrenador | Editar y eliminar. |
-| 10 | Formulario rutina | Entrenador | Solo atletas vinculados, ejercicios dinámicos, crear/editar. |
-| 11 | Mi entrenador sin vínculo | Atleta | Estado sin entrenador y Buscar. |
-| 12 | Buscar entrenador | Atleta | Username/ID, tarjetas; carga, vacío, error. |
-| 13 | Perfil público entrenador | Atleta | Nombre, username, ID y solicitar. |
-| 14 | Estado solicitud | Atleta | Pendiente, rechazada y cancelada; cancelar pendiente. |
-| 15 | Mi entrenador activo | Atleta | Identidad, fecha y finalizar vínculo. |
-| 16 | Solicitudes recibidas | Entrenador | Atleta, fecha, aceptar/rechazar. |
-| 17 | Detalle atleta vinculado | Entrenador | Rutinas, asignar y desvincular. |
-| 18 | Identidad entrenador | Entrenador | Copiar username e ID. |
+| Vista | Página principal | Rol | Referencia |
+|---|---:|---|---|
+| 01 Inicio de sesión | 2 | Ambos | `mockups/svg/01. Inicio de sesión.svg`; PNG homónimo |
+| 02 Registro | 3 | Ambos | `mockups/png/02. Registro.png` |
+| 03 Hoy | 4 | Atleta | `mockups/svg/03. Hoy - Atleta.svg`; PNG homónimo |
+| 04 Calculadora corporal | 6 | Ambos | `mockups/png/04. Calculadora corporal.png` |
+| 05 Mis rutinas | 7 | Atleta | `mockups/png/05. Mis rutinas - Atleta.png` |
+| 06 Detalle de rutina | 8 | Atleta | `mockups/png/06. Detalle de rutina - Atleta.png` |
+| 07 Mis rutinas | 9 | Entrenador | `mockups/png/07. Mis rutinas - Entrenador.png` |
+| 08 Mis atletas | 10 | Entrenador | `mockups/png/08. Mis atletas - Entrenador.png` |
+| 09 Detalle de rutina | 11 | Entrenador | `mockups/png/09. Detalle de rutina - Entrenador.png` |
+| 10 Formulario de rutina | 12 | Entrenador | `mockups/png/10. Formulario de rutina.png` |
+| 11 Mi entrenador sin vínculo | 13 | Atleta | `mockups/png/11. Mi entrenador - Sin vínculo.png` |
+| 12 Buscar entrenador | 14 | Atleta | `mockups/png/12. Buscar entrenador.png` |
+| 13 Perfil público del entrenador | 26 | Atleta | Exportación `Html → Body.png` (exportación PNG inspeccionada) |
+| 14 Estado de solicitud | 15 | Atleta | `mockups/png/14. Estado de solicitud.png` |
+| 15 Mi entrenador activo | 16 | Atleta | `mockups/png/15. Mi entrenador - Vínculo activo.png` |
+| 16 Solicitudes recibidas | 17 | Entrenador | `mockups/png/16. Solicitudes recibidas.png` |
+| 17 Detalle de atleta vinculado | 18 | Entrenador | `mockups/png/17. Detalle de atleta vinculado.png` |
+| 18 Identidad del entrenador | 27 | Entrenador | Exportación `Html → Body-1.png` (exportación PNG inspeccionada) |
+| 19 Configuración general | 19 | Ambos | `mockups/png/19. Configuración general.png` |
+| 20 Preferencias de notificaciones | 20 | Ambos | `mockups/svg/20. Preferencias de notificaciones.svg`; PNG homónimo |
+| 21 Recordatorio diario | 21 | Atleta | `mockups/png/21. Configuración de recordatorio.png` |
+| 22 Configuración biométrica | 22 | Ambos | `mockups/png/22. Configuración biométrica.png` |
+| 23 Desbloqueo biométrico | 23 | Ambos | `mockups/png/23. Desbloqueo biométrico.png` |
+| 24 Seguimiento de pasos | 24 | Atleta | `mockups/png/24. Seguimiento de pasos.png` |
 
-Vistas 01–10 son el inventario original; 11–18 son ocho vistas nuevas propuestas. Las variantes sin vínculo/solicitud/vínculo activo pueden compartir Route y UiState; el inventario no exige 18 ViewModels.
+La página 5 (`03. Hoy - Atleta-1.png`) es variante de navegación inferior; la página 4 define el contenido principal de Hoy. La página 1 (`20. Preferencias de notificaciones-1.png`) es variante; la página 20 es principal. La página 25 (`Ejemplos de notificaciones Android.png`) ilustra nueva solicitud, aceptación, rechazo, rutina asignada y recordatorio local; no es una pantalla adicional.
 
-Navegación inferior: atleta Hoy, Calculadora, Rutinas, Entrenador; entrenador Rutinas, Atletas, Calculadora. Solicitudes dentro de Atletas; identidad pública desde encabezado del entrenador. Diálogos pendientes: enviar/cancelar solicitud, aceptar/rechazar, abandonar/desvincular y eliminar rutina. Cada flujo necesitará carga, éxito confirmado, vacío/error y Snackbar cuando corresponda. Verificar contraste, 48 dp, semántica, texto escalable, teclado e insets en diseños actualizados.
+## Correcciones para las futuras pantallas
 
-## Ampliación v5.0 propuesta para etapa 02
+- Hoy: un solo encabezado; cinco hábitos binarios y meta de tres. El podómetro muestra pasos observados en sesiones activas y conserva alternativa manual. No se incorporan vasos, sueño, calorías o distancia como registros individuales.
+- Buscar entrenador: resultados reales únicamente por username o UUID. Los identificadores cortos y resultados no coincidentes del mockup son ilustrativos.
+- Preferencias: el rol procede de la sesión; retirar selector de rol y simuladores. Mostrar categorías correspondientes al rol y mantener permisos Android separados de preferencias.
+- Biometría: disponible solo después de una sesión inicial habilitada; usar diálogo real del sistema. Las contraseñas de ejemplo no son datos de producción.
+- Rutinas y vínculo: acciones solo según autorización y vínculo activo. No presentar estados vacíos junto con datos ni acciones inexistentes.
+- Notificaciones: cuatro eventos remotos FCM y recordatorio local condicionado a meta pendiente; no prometer puntualidad ni mostrar información privada en pantalla bloqueada.
 
-Los 18 diseños anteriores se conservan. Actualizar Login, Hoy y encabezados principales con identidad oscura/gris/rojo; contemplar permisos rechazados, hardware ausente, errores y ejemplos de las cuatro clases de push más recordatorio local. Incorporar: 19 Configuración general; 20 Preferencias de notificaciones; 21 Configuración de recordatorio; 22 Configuración biométrica; 23 Desbloqueo biométrico; 24 Seguimiento de pasos. Total previsto: 24 referencias. La biometría usará diálogo real del sistema; no diseñar sustituto falso. No se actualizaron mockups visuales en esta etapa.
+La etapa 02.2 implementa **componentes base**, no las 24 pantallas. Las capturas contienen datos ilustrativos y no definen nuevas reglas de negocio.

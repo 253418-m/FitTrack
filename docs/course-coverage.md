@@ -9,7 +9,7 @@
 | Evaluación III | API REST, JWT, PostgreSQL, Hilt/Retrofit, vínculos, CRUD y notificaciones remotas | 03–10, 13, 17–18, 20–22; backend, red, UI, seguridad y E2E |
 | Android Basics 1 | Kotlin, recursos, estructura Android, Compose y SRP de MainActivity | 01; evidencia local previa de compilación y código |
 | Android Basics 2 | Estado, formularios, validaciones y pruebas de lógica | 04, 10, 12; pruebas pendientes |
-| Android Basics 3 | Colecciones, LazyColumn, Material y accesibilidad | 02, 06–12; revisión UI pendiente |
+| Android Basics 3 | Colecciones, LazyColumn, Material y accesibilidad | 02: tema, componentes, tipografía y previews implementados; listas y pantallas completas pendientes en 06–12 |
 | Android Basics 4 | ViewModel, Lifecycle, StateFlow, navegación tipada y UDF | 04–12, 18; pruebas de navegación/estado pendientes |
 | Android Basics 5 | Corrutinas, Retrofit, JSON, repositorios, errores y Hilt | 04–10, 17–18; MockWebServer e integración pendientes |
 | Android Basics 6 | Preferences DataStore; integridad relacional en PostgreSQL backend | 03–04, 11, 16, 19; almacenamiento y aislamiento pendientes |
@@ -29,4 +29,4 @@
 | AWS | 21 | EC2 única, PostgreSQL, HTTPS, presupuesto y respaldo |
 | Aceptación final | 22 | E2E, dispositivos, criterios oficiales y evidencias |
 
-Room/SQLite Android no son requisito; PostgreSQL es la base relacional remota y DataStore almacena datos locales. No declarar cobertura académica completa sin criterios oficiales del docente y pruebas ejecutadas.
+La fase 02.2 aporta evidencia local previa de Compose, Material 3, state hoisting, tema oscuro, tipografía, previews y accesibilidad: 3 pruebas unitarias y 11 instrumentadas aprobadas en Pixel 10 Pro XL AVD, render de previews y arranque real verificado antes de los ajustes 02.3. En la revisión 02.3 aprobaron compilación, 3 pruebas unitarias, lint y 11 pruebas instrumentadas actuales en Pixel 10 Pro XL AVD; el arranque tras los ajustes se verificó visualmente. La prueba de contraseña ahora comprueba el texto enmascarado en `EditableText` y los botones deshabilitados reciben una pulsación táctil de prueba. Esta evidencia cubre el sistema de diseño; no demuestra pantallas funcionales ni cumplimiento completo de la rúbrica. Room/SQLite Android no son requisito; PostgreSQL es la base relacional remota y DataStore almacena datos locales. No declarar cobertura académica completa sin criterios oficiales del docente y pruebas ejecutadas.
