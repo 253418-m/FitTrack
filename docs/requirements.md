@@ -1,6 +1,6 @@
 # Requisitos del MVP (planificados)
 
-Estado: contrato rector de la etapa 01, **sin implementación de negocio**. Dos roles registrados libremente: `ATHLETE` y `TRAINER`. Un entrenador admite muchos atletas; cada atleta, como máximo un entrenador activo. Toda autorización remota corresponde a la API.
+Estado: contrato rector de FitTrack v5.0. La etapa 03 implementó en código el componente backend de RF-01 y RF-02 (registro, login, JWT y usuario actual); su validación backend contra PostgreSQL real y HTTP local aprobó. La integración Android sigue pendiente. RF-03 a RF-05 requieren la etapa Android siguiente, y los demás requisitos siguen planificados. Dos roles registrados libremente: `ATHLETE` y `TRAINER`. Un entrenador admite muchos atletas; cada atleta, como máximo un entrenador activo. Toda autorización remota corresponde a la API.
 
 | ID | Requisito |
 |---|---|
@@ -65,4 +65,4 @@ Hábitos fijos: ocho vasos de agua, 8,000 pasos, siete horas de sueño, 30 minut
 
 UI en español, Material 3 oscuro, accesibilidad (contraste 4.5:1, táctiles 48 dp, semántica, texto escalable), estados completos, pruebas unitarias, de red, UI, backend PostgreSQL y extremo a extremo. API REST propia, HTTPS en producción, datos sensibles fuera de Git, errores tipados y sin trazas internas. Una sola EC2 con PostgreSQL y FastAPI, presupuesto del laboratorio 50 USD; no RDS.
 
-Fuera del alcance: Room/SQLite Android, offline-first, Health Connect, GPS, cámara, micrófono, Bluetooth, NFC, chat, pagos, cambio de rol, panel admin, hábitos remotos, seguimiento corporal por entrenador, varios entrenadores activos, infraestructura distribuida y Firebase como sustituto de API. Hardware elegido, FCM como transporte y WorkManager para recordatorios sí son requisitos planificados.
+La exclusión anterior de Room/SQLite Android y consulta offline queda pendiente de sustitución: ambos son obligatorios según la rúbrica oficial de Unidad 4. Fuera del alcance actual permanecen Health Connect, GPS, cámara, micrófono, Bluetooth, NFC, chat, pagos, cambio de rol, panel admin, hábitos remotos, seguimiento corporal por entrenador, varios entrenadores activos, infraestructura distribuida y Firebase como sustituto de API. Hardware elegido, FCM como transporte y WorkManager para recordatorios sí son requisitos planificados.
