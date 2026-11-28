@@ -1,5 +1,7 @@
 # Historias de usuario · FitTrack v5.1 aprobado
 
+**Estado vigente R1–R2 · FitTrack Gym v6.0 (27-11-2026):** alcance aprobado por el usuario y aclaraciones docentes aportadas por él. Sustituye expresamente las reglas incompatibles v5.1 de registro libre/selección de rol, cinco hábitos/meta 3 de 5 y cumplimiento manual de pasos. Las secciones previas incompatibles se conservan como evidencia histórica, sin vigencia normativa. No se atribuye una inspección nueva de material docente. Implementación actual: autenticación e invitaciones; procesos de negocio, Room, FCM, hardware, Contactame y HTTPS siguen pendientes.
+
 **Estado vigente 03.R.4 (27-11-2026):** alcance v5.1 aprobado expresamente por el usuario mediante D01–D11, registradas en [decisiones](decisions.md). Las menciones anteriores a aprobación pendiente de esas decisiones son históricas y quedan sustituidas por este registro. Funcionalidades futuras: PLANNED; aprobación de alcance no acredita implementación, pruebas ni aprobación docente. Cobertura visual global parcial; verificaciones externas pendientes.
 
 **Fecha:** 27-11-2026. **Estado:** propuesta para revisión; no equivale a funcionalidades terminadas. La especificación oficial (p. 2) vincula historias con cada proceso y la rúbrica (p. 2) exige **15 o más historias en el documento**. Se proponen 32; queda por aclarar con el docente la posible lectura de 15 por proceso. [Procesos](business-processes.md) · [RF](requirements.md) · [Trazabilidad](rubric-compliance.md). Los IDs y prioridades no autorizan implementación hasta aprobar el alcance P03 y políticas pendientes.
@@ -330,3 +332,37 @@
 ## Priorización y trazabilidad
 
 26 Must, 5 Should, 1 Could y 0 Won't en este inventario de historias. HU25–HU29 y HU30–HU32 cierran la cobertura de rachas, recordatorios, Deshacer, compartir, preferencias, rutinas propias y entrenador activo. El backlog completo y las exclusiones se definen en [requirements.md](requirements.md); no se fabrican historias para funciones descartadas. Contáctame cuenta ahora con vista independiente inspeccionada; Room tiene variantes offline inspeccionadas. El [inventario visual](design/mockup-inventory.md) registra las brechas restantes de las 26 HU Must, incluidas carga/error de Contactame y sesión expirada offline; disponer de una imagen no acredita la implementación. Cada historia Must se verificará con API real, estado UI y prueba indicada antes de declararse completada.
+
+## Criterios vigentes de historias previas v6.0
+
+La prioridad previa de HU01–HU32 se conserva. HU01/HU02/HU05 aceptan solo rol devuelto por servidor y registro invitado; HU08–HU13/HU31 usan catálogo y cuentas activas. HU14–HU17/HU30 incorporan fecha/unicidad diaria y Hoy combinado. HU18/HU19/HU21/HU25/HU26 pasan a cuatro hábitos/meta3/4, sin entrenar como quinto hábito. HU20 elimina entrada y marcado manual: sin permiso/sensor muestra limitación; solo observación confirmada alcanza caminar. Las alternativas manuales y metas3/5 en redacción histórica quedan sustituidas. Los escenarios de red/cancelación/401/403/409 y propiedad mantienen vigencia.
+
+## HU33 · Registrarse con invitación
+- **Actor / proceso / prioridad / RF:** Atleta o entrenador invitado; acceso a P01–P03; MUST; RF-01/RF-57.
+- **Historia:** Como persona invitada por FitTrack Gym, quiero registrar mi cuenta con un código individual para acceder con el rol autorizado.
+- **Precondiciones:** invitación vigente y cupo reservado.
+- **Aceptación:** Dado código vigente, cuando envío identidad válida y contraseñas iguales sin role, entonces se crea cuenta y consume código atómicamente, y navego según rol devuelto. Código incorrecto/expirado/revocado/usado devuelve error genérico; role extra devuelve422; conflicto de usuario no consume la invitación. Código permanece solo en memoria móvil.
+- **Vistas/API/pruebas/estado:** Registro actualizado; POST auth/register; HTTP, concurrencia y DTO; R2 IMPLEMENTED, E2E pendiente.
+
+## HU34 · Autorizar altas y desactivar cuentas
+- **Actor / proceso / prioridad / RF:** Operador privado del gimnasio (no rol móvil); transversal; MUST; RF-58/RF-59.
+- **Historia:** Como operador autorizado, quiero emitir/revocar invitaciones y desactivar cuentas para controlar las altas del gimnasio.
+- **Precondiciones:** acceso privado al servidor/CLI; configuración segura.
+- **Aceptación:** Dado cupo disponible, cuando emito una invitación, entonces se reserva plaza y se muestra el código solo una vez tras commit. Listar no devuelve códigos/hashes. Dos emisiones concurrentes no exceden cupo. Revocada/expirada libera reserva; desactivar impide login y JWT anterior sin borrar usuario. No se altera automáticamente ninguna cuenta previa.
+- **Vistas/API/pruebas/estado:** CLI sin pantalla/API admin; bloqueo PostgreSQL, caducidad, rollback y autorización; R2 IMPLEMENTED.
+
+## HU35 · Cumplir la rutina diaria
+- **Actor / proceso / prioridad / RF:** Atleta; P02/P03; MUST; RF-60/RF-61.
+- **Historia:** Como atleta, quiero consultar y confirmar mi rutina asignada de hoy para registrar el entrenamiento sin confundirlo con mis hábitos personales.
+- **Precondiciones:** sesión activa y asignación autorizada para la fecha.
+- **Aceptación:** Dada rutina propia del día, cuando confirmo cumplimiento y la API persiste, entonces Hoy muestra rutina cumplida separada de la meta3/4. Sin rutina muestra vacío; un atleta ajeno recibe403/404; fallo/409 no se presenta como guardado. Dos confirmaciones no duplican cumplimiento.
+- **Vistas/API/pruebas/estado:** Hoy/Detalle necesitan variantes; contrato de cumplimiento por definir antes de implementar; unicidad, propietario, HTTP y ViewModel; bloque rutinas/cumplimiento PLANNED.
+
+## HU36 · Consultar historial de asignaciones
+- **Actor / proceso / prioridad / RF:** Entrenador; P02/P03; MUST; RF-61.
+- **Historia:** Como entrenador, quiero consultar por fecha mis rutinas asignadas y su cumplimiento para revisar el seguimiento de mis planes.
+- **Precondiciones:** sesión TRAINER activa y propiedad de rutinas.
+- **Aceptación:** Dadas asignaciones propias, cuando filtro fechas/atleta, entonces veo solo mi historial y cumplimiento confirmado, sin hábitos personales. Rutinas ajenas no se exponen; vacío y error/reintento son diferentes. Retención/autorización tras finalizar vínculos se concreta antes del bloque de historial.
+- **Vistas/API/pruebas/estado:** Historial requiere referencia visual; contrato futuro; propiedad/filtros/fechas/UI; PLANNED.
+
+Inventario actual: 36 HU únicas, 30 Must, 5 Should y 1 Could. Opiniones/puntuaciones figuran como backlog Should posterior al núcleo, sin implementar ni fabricar historias para completar conteos.

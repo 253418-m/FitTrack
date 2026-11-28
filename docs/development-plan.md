@@ -1,5 +1,7 @@
 # Plan incremental FitTrack · alcance v5.1 aprobado
 
+**Estado vigente R1–R2 · FitTrack Gym v6.0 (27-11-2026):** alcance aprobado por el usuario y aclaraciones docentes aportadas por él. Sustituye expresamente las reglas incompatibles v5.1 de registro libre/selección de rol, cinco hábitos/meta 3 de 5 y cumplimiento manual de pasos. Las secciones previas incompatibles se conservan como evidencia histórica, sin vigencia normativa. No se atribuye una inspección nueva de material docente. Implementación actual: autenticación e invitaciones; procesos de negocio, Room, FCM, hardware, Contactame y HTTPS siguen pendientes.
+
 **Estado vigente 03.R.4 (27-11-2026):** alcance v5.1 aprobado expresamente por el usuario mediante D01–D11, registradas en [decisiones](decisions.md). Las menciones anteriores a aprobación pendiente de esas decisiones son históricas y quedan sustituidas por este registro. Funcionalidades futuras: PLANNED; aprobación de alcance no acredita implementación, pruebas ni aprobación docente. Cobertura visual global parcial; verificaciones externas pendientes.
 
 Etapa 01 **completada y publicada** en GitHub con commit `16f05f788efcbd199278d0291d2e90f7b7974693`. Existen `main`, `develop` y `chore/project-bootstrap`; `main` es estable y `develop` integra etapas revisadas. La fase 02.1 (mockups) está completada; la fase 02.2 (sistema de diseño) tuvo validación local previa en `feat/design-system`. La revisión 02.3 aprobó compilación, 3 pruebas unitarias, lint y 11 pruebas instrumentadas actuales; el arranque se verificó en Pixel 10 Pro XL AVD. La etapa 02 se publicó e integró en `develop` mediante [PR #1](https://github.com/253418-m/FitTrack/pull/1), merge commit `581bc52523dace75d55b7cedee4c13c05064ef16`. La etapa 03 está implementada y validada localmente en `feat/backend-auth`: PostgreSQL 18.6, migración `bd7cce2c8602`, 48 pruebas iniciales aprobadas y flujo HTTP real comprobado. Fue revisada, publicada e integrada en `develop` por PR #2; no implica inicio de etapa 04. Las etapas 04–22 permanecen pendientes. Los commits deben representar contribuciones reales.
@@ -87,3 +89,23 @@ Registro de cuatro variantes completado: 03.E/03.F/03.G y 19.B. Se preservan 22 
 | 11.B | feat/habits-streaks | 253418-m |
 
 La autoría Git se confirmará por contribuciones reales. Secuencia requerida: **03.R.5 auditoría/commit documental → 03.R.6 push → 03.R.7 PR hacia develop → 03.R.8 merge/sincronización → 04 autenticación Android**. La etapa 04 depende de integración documental previa y revisión de sus wireframes Must. Ninguna operación posterior queda ejecutada ni autorizada automáticamente por esta formalización.
+
+## Avance 04.1 · 27-11-2026
+
+La integración documental 03.R.8 cerró con merge `8e174fc44daa7fedbf26d40ca1e65c98c31c4855`. Se creó `feat/android-auth` desde esa base; responsable planificado 253418-m, sin atribuir todavía autoría de un commit.
+
+04.1 implementada localmente: HU01–HU05 (RF-01–RF-05) en su componente de autenticación Android, UseCases/ViewModels, sesión cifrada, Navigation Compose por roles y logout local. HU03 no acredita biometría (etapa 15); HU04 no acredita limpieza Room, FCM, hardware o WorkManager, pendientes de sus etapas. No se modificaron backend ni migraciones.
+
+Validación 04.1: assembleDebug, testDebugUnitTest y lintDebug (código 0; 25 pruebas unitarias aprobadas, cero fallos; 0 errores/22 advertencias lint); pruebas unitarias con fakes/MockWebServer y pruebas instrumentadas de cifrado/logout en emulador. El detalle de resultados se registra en [cobertura](course-coverage.md). 04.2 queda pendiente: HTTP real/E2E contra backend, ambos roles, expiración/reinicio/reintento, teclado/pantalla pequeña y comprobación visual de los destinos. La etapa 04 completa no está cerrada. Sin commit ni push de esta implementación.
+
+## Plan inmediato v6.0 · entrega 02-12-2026
+
+R1: alineación documental del gimnasio único, invitaciones y tres procesos actualizados. R2: autenticación backend/Android por invitación, migración incremental y CLI, preservando 04.1. Rama actual feat/android-auth, sin nueva rama, commit ni publicación. Las 22 etapas históricas y responsables se conservan para trazabilidad; las reglas incompatibles quedan sustituidas por v6.0.
+
+Siguiente: autorizar migración fittrack_dev y validar E2E del registro invitado/login/me/logout en ambos roles. Después priorizar selección/vínculo, rutina diaria y cumplimiento, Room/Contactame, FCM/hardware/HTTPS con pruebas, según dependencias reales; pasos automáticos se implementan en su bloque posterior. Opiniones/puntuaciones Should tras núcleo. R1–R2 no acredita implementación de procesos, fecha de entrega no justifica saltar seguridad/pruebas.
+
+## R2.2 — Validación de autenticación (2026-11-28)
+
+El usuario reportó como satisfactorios los registros de Carlos (atleta) y Luis (entrenador), destinos Hoy/Mis rutinas, login de ambos roles, restauración de sesión vigente, logout con protección del back stack, logout sin conexión y aislamiento entre cuentas. Es evidencia manual reportada por el usuario, no una ejecución automatizada. R2.1.1 verificó HTTP Android 401/201/200 y confirmó el bloqueo de red local de Android 17 mediante revocación/concesión controlada del permiso debug.
+
+Pendientes: errores E2E restantes, regresión instrumentada del manifiesto final, 403 en recursos de negocio, limpieza futura Room/FCM/hardware, biometría, HTTPS AWS, revisión de cuentas anteriores a invitaciones y seguridad/integración final. La cobertura visual global permanece parcial; las previews nuevas no se consideran inspeccionadas.

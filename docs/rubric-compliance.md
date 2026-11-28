@@ -1,5 +1,7 @@
 # Trazabilidad de la rúbrica · FitTrack v5.1 aprobado
 
+**Estado vigente R1–R2 · FitTrack Gym v6.0 (27-11-2026):** alcance aprobado por el usuario y aclaraciones docentes aportadas por él. Sustituye expresamente las reglas incompatibles v5.1 de registro libre/selección de rol, cinco hábitos/meta 3 de 5 y cumplimiento manual de pasos. Las secciones previas incompatibles se conservan como evidencia histórica, sin vigencia normativa. No se atribuye una inspección nueva de material docente. Implementación actual: autenticación e invitaciones; procesos de negocio, Room, FCM, hardware, Contactame y HTTPS siguen pendientes.
+
 **Estado vigente 03.R.4 (27-11-2026):** alcance v5.1 aprobado expresamente por el usuario mediante D01–D11, registradas en [decisiones](decisions.md). Las menciones anteriores a aprobación pendiente de esas decisiones son históricas y quedan sustituidas por este registro. Funcionalidades futuras: PLANNED; aprobación de alcance no acredita implementación, pruebas ni aprobación docente. Cobertura visual global parcial; verificaciones externas pendientes.
 
 **Fecha:** 27-11-2026. **Fuentes oficiales:** `Proyecto_Unidad4_App_MVP.pdf` y `Rubrica_Proyecto_Unidad4.pdf`, ubicados en `FitTrack-references/material-docente` fuera del repositorio. Se citan por página y no se publican. Se extrajo el texto de las tres páginas de ambos documentos en la auditoría 03.R; no se verificó su maquetación visual. No se asigna una nota final. La portada de la rúbrica indica **40 puntos** (p. 1), mientras la tabla analítica suma **100 % / 100 puntos** (pp. 2–3); la conversión requiere aclaración docente. La frase sobre ≥15 historias puede interpretarse como total o por proceso; la rúbrica p. 2 dice 15 o más en el documento completo.
@@ -36,3 +38,21 @@ Se abrieron los 13 PNG v5.1 y los 24 PNG de vistas principales originales, dos v
 ## Complemento 03.R.3.1
 
 Se registraron 03.E (error de guardado), 03.F (409), 03.G (confirmación de restablecimiento) y 19.B (configuración entrenador con ajustes), inspeccionando solo sus PNG. Total: 17 PNG/17 SVG localizados, 25 vistas únicas, 56 RF, 32 HU (26 Must, 5 Should, 1 Could). C01 mejora evidencia visual de HU18 y configuración del entrenador; cobertura global parcial. C02–C09 no cambian de estado por disponer de imágenes. Permanecen pendientes expiración offline, permiso/sensor, estados biométricos y permiso/destino FCM; contacto y confirmaciones pueden reutilizar componentes, sujetos a cotejo y pruebas. Ver [inventario actualizado](design/mockup-inventory.md). Ninguna decisión de alcance pendiente queda aprobada.
+
+## Evidencia incremental 04.1 · 27-11-2026
+
+Android incorpora registro/login, UseCases, ViewModels Hilt, Retrofit/Serialization/OkHttp, sesión cifrada DataStore/Keystore y navegación protegida por rol. C03, C04, C05, C06 y C09 siguen PARTIAL funcionalmente: aún faltan E2E real 04.2, Contactame, Room, pruebas finales, HTTPS y demás recursos de negocio. No se acredita HU22, hardware físico ni aprobación docente.
+
+Las pruebas de esta entrega son locales: fakes, MockWebServer y emulador; no se declaran CI. El [plan](development-plan.md) y [cobertura](course-coverage.md) registran alcance y resultados. Se mantienen íntegros D01–D11, la cobertura visual global parcial y verificaciones externas pendientes.
+
+## Alineación v6.0 R1–R2
+
+C01: requisitos/historias/procesos actualizados, visuales v6.0 parciales; sin LOGRADO global. C02: P01 selección/vínculo, P02 rutinas diarias y P03 cumplimiento/seguimiento planificados; no E2E de negocio. C03/C04: registro invitado, rol servidor, cuenta activa y CLI implementados; validación E2E móvil real pendiente. C05/C06: arquitectura Android/red/sesión reutilizada, Room pendiente. C07/C08: FCM/hardware pendientes; pasos sin alternativa manual, biometría con validación docente pendiente. C09: pruebas locales de regresión y concurrencia; sin CI nueva, commit ni autoría atribuida.
+
+La actualización conserva los nueve criterios y sus pesos. No se repite auditoría oficial ni se declara cumplimiento funcional por documentos/previews. Brechas y evidencia histórica v5.1 permanecen diferenciadas.
+
+## R2.2 — Validación de autenticación (2026-11-28)
+
+El usuario reportó como satisfactorios los registros de Carlos (atleta) y Luis (entrenador), destinos Hoy/Mis rutinas, login de ambos roles, restauración de sesión vigente, logout con protección del back stack, logout sin conexión y aislamiento entre cuentas. Es evidencia manual reportada por el usuario, no una ejecución automatizada. R2.1.1 verificó HTTP Android 401/201/200 y confirmó el bloqueo de red local de Android 17 mediante revocación/concesión controlada del permiso debug.
+
+Pendientes: errores E2E restantes, regresión instrumentada del manifiesto final, 403 en recursos de negocio, limpieza futura Room/FCM/hardware, biometría, HTTPS AWS, revisión de cuentas anteriores a invitaciones y seguridad/integración final. La cobertura visual global permanece parcial; las previews nuevas no se consideran inspeccionadas.

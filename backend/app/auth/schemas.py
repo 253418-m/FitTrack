@@ -14,7 +14,7 @@ class RegisterRequest(BaseModel):
     email: EmailStr
     password: str = Field(min_length=8, max_length=128)
     password_confirmation: str = Field(min_length=8, max_length=128)
-    role: UserRole
+    invitation_code: str = Field(min_length=16, max_length=128, repr=False)
 
     @field_validator("name", mode="before")
     @classmethod

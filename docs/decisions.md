@@ -1,5 +1,7 @@
 # Decisiones y asuntos pendientes · FitTrack v5.1 aprobado
 
+**Estado vigente R1–R2 · FitTrack Gym v6.0 (27-11-2026):** alcance aprobado por el usuario y aclaraciones docentes aportadas por él. Sustituye expresamente las reglas incompatibles v5.1 de registro libre/selección de rol, cinco hábitos/meta 3 de 5 y cumplimiento manual de pasos. Las secciones previas incompatibles se conservan como evidencia histórica, sin vigencia normativa. No se atribuye una inspección nueva de material docente. Implementación actual: autenticación e invitaciones; procesos de negocio, Room, FCM, hardware, Contactame y HTTPS siguen pendientes.
+
 **Estado vigente 03.R.4 (27-11-2026):** alcance v5.1 aprobado expresamente por el usuario mediante D01–D11, registradas en [decisiones](decisions.md). Las menciones anteriores a aprobación pendiente de esas decisiones son históricas y quedan sustituidas por este registro. Funcionalidades futuras: PLANNED; aprobación de alcance no acredita implementación, pruebas ni aprobación docente. Cobertura visual global parcial; verificaciones externas pendientes.
 
 ## Requisitos confirmados por el propietario
@@ -108,3 +110,9 @@ Todas las decisiones de esta tabla están **APPROVED por el usuario**. No consti
 | D11 | Completar wireframes incrementalmente antes de cada feature Must, reutilizando componentes. Cobertura global parcial y C01 no completamente acreditado. |
 
 **Verificaciones externas abiertas:** correo real autorizado; aceptación docente de biometría y disponibilidad de hardware físico; brechas visuales Must; aclaración sobre historias por proceso y conversión de puntos; renderizado Mermaid y verificación independiente SVG; pruebas funcionales, seguridad, firewall, FCM y HTTPS. Estas verificaciones no suspenden la aprobación de alcance. Otras decisiones técnicas no incluidas, como el outbox o límites técnicos aún no fijados, conservan su estado propio.
+
+## Decisiones vigentes v6.0 (aprobadas por el usuario)
+
+V6-D01: FitTrack Gym, gimnasio único y dos roles móviles; administración CLI privada. V6-D02: invitaciones individuales por rol, capacidades iniciales configurables 100/10 y vigencia 48 h; rol servidor. V6-D03: catálogo activo y vinculación formal única. V6-D04: rutina diaria única por atleta/fecha, Hoy combina rutina y hábitos. V6-D05: cuatro hábitos (agua/pasos/sueño/estiramiento), meta 3/4; cumplimiento de rutina independiente e historial propio del entrenador. V6-D06: pasos automáticos exclusivamente, sin alternativa manual; opiniones/puntuaciones Should posteriores al núcleo.
+
+Estas decisiones sustituyen D01 v5.1 en cantidad/meta/seguimiento y las reglas incompatibles de registro libre, campos role cliente y aplazamiento del historial independiente. Se conservan Room, acceso conservador con JWT vigente, Contactame, seguridad, FCM, hardware y HTTPS. No se modifican identidades Git ni atribuciones previas. Pendiente: políticas detalladas de fechas/dispositivo, relaciones al desactivar y visuales de las features futuras. No se afirma aceptación académica total.

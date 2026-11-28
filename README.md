@@ -1,8 +1,10 @@
 # FitTrack
 
+**Estado vigente R1–R2 · FitTrack Gym v6.0 (27-11-2026):** alcance aprobado por el usuario y aclaraciones docentes aportadas por él. Sustituye expresamente las reglas incompatibles v5.1 de registro libre/selección de rol, cinco hábitos/meta 3 de 5 y cumplimiento manual de pasos. Las secciones previas incompatibles se conservan como evidencia histórica, sin vigencia normativa. No se atribuye una inspección nueva de material docente. Implementación actual: autenticación e invitaciones; procesos de negocio, Room, FCM, hardware, Contactame y HTTPS siguen pendientes.
+
 **Estado vigente 03.R.4 (27-11-2026):** alcance v5.1 aprobado expresamente por el usuario mediante D01–D11, registradas en [decisiones](docs/decisions.md). Las menciones anteriores a aprobación pendiente de esas decisiones son históricas y quedan sustituidas por este registro. Funcionalidades futuras: PLANNED; aprobación de alcance no acredita implementación, pruebas ni aprobación docente. Cobertura visual global parcial; verificaciones externas pendientes.
 
-Aplicación Android nativa en español y API REST propia para hábitos saludables, calculadora corporal y rutinas entre entrenadores y atletas. La etapa 01 está completada y publicada. La etapa 02 de diseño se completó e integró en `develop` mediante el PR #1 (merge commit `581bc52523dace75d55b7cedee4c13c05064ef16`). La etapa 03 implementó y validó localmente el backend de registro, login y usuario actual sobre PostgreSQL 18.6; la migración `users` y las pruebas de integración pasaron. La etapa quedó versionada e integrada en `develop` mediante PR #2, merge `12df7874276bece8e682a5540806238f2145fff1`. Android conserva solo la pantalla temporal.
+Aplicación Android nativa en español y API REST propia para hábitos saludables, calculadora corporal y rutinas entre entrenadores y atletas. La etapa 01 está completada y publicada. La etapa 02 de diseño se completó e integró en `develop` mediante el PR #1 (merge commit `581bc52523dace75d55b7cedee4c13c05064ef16`). La etapa 03 implementó y validó localmente el backend de registro, login y usuario actual sobre PostgreSQL 18.6; la migración `users` y las pruebas de integración pasaron. La etapa quedó versionada e integrada en `develop` mediante PR #2, merge `12df7874276bece8e682a5540806238f2145fff1`. La autenticación Android se implementa localmente en 04.1, pendiente de validación real 04.2.
 
 ## Organización y alcance
 
@@ -58,3 +60,27 @@ Se planificaban 46 requisitos funcionales, 24 referencias de diseño y 22 etapas
 Las etapas 01, 02 y 03 están integradas en `develop`; la etapa 03 cerró con el [PR #2](https://github.com/253418-m/FitTrack/pull/2) y merge `12df7874276bece8e682a5540806238f2145fff1`. Esta rama documenta una **alcance aprobado por el usuario** de 56 RF y 32 HU, no una implementación adicional. La etapa 04 no ha comenzado.
 
 La rúbrica de Unidad 4 exige tres procesos de negocio completos, Contactame, Room con acceso sin conexión, FCM, tres tipos de hardware y pruebas Android de casos de uso y ViewModels. [Procesos](docs/business-processes.md), [historias](docs/user-stories.md), [trazabilidad](docs/rubric-compliance.md) y [plan](docs/development-plan.md) son las fuentes rectoras. P03 de hábitos remotos, los campos de Contactame y la política de acceso offline están aprobados por D01–D05. La API HTTPS pública aún no existe.
+
+## FitTrack Gym v6.0 · R1–R2
+
+Gimnasio ficticio único, dos roles móviles (ATHLETE/TRAINER), administración mediante CLI privada. Cupos iniciales configurables: 100 atletas y 10 entrenadores activos; cada invitación vigente reserva una plaza por 48 horas configurables. El servidor asigna el rol; no existe ADMIN móvil ni registro libre.
+
+P01 selección de entrenador activo del catálogo y vinculación formal (máximo uno por atleta); P02 rutinas diarias (máximo una por atleta/fecha); P03 cumplimiento de rutina independiente y cuatro hábitos personales (agua, pasos, sueño, estiramiento), meta 3 de 4. Hoy agrupará rutina y hábitos. Pasos exclusivamente observados por hardware; sin marcado ni entrada manual. Opiniones/puntuaciones son Should posteriores al núcleo.
+
+R1–R2 conserva Android 04.1, adapta registro y backend mediante invitaciones. La migración de desarrollo requiere autorización posterior: **no iniciar registro real v6.0 contra fittrack_dev antes de migrarla**. Ver [contrato](docs/api-contract.md), [CLI](backend/README.md) y [decisiones](docs/decisions.md). No se implementaron todavía los nuevos procesos.
+
+## R2.2 — Validación de autenticación (2026-11-28)
+
+El usuario reportó como satisfactorios los registros de Carlos (atleta) y Luis (entrenador), destinos Hoy/Mis rutinas, login de ambos roles, restauración de sesión vigente, logout con protección del back stack, logout sin conexión y aislamiento entre cuentas. Es evidencia manual reportada por el usuario, no una ejecución automatizada. R2.1.1 verificó HTTP Android 401/201/200 y confirmó el bloqueo de red local de Android 17 mediante revocación/concesión controlada del permiso debug.
+
+Pendientes: errores E2E restantes, regresión instrumentada del manifiesto final, 403 en recursos de negocio, limpieza futura Room/FCM/hardware, biometría, HTTPS AWS, revisión de cuentas anteriores a invitaciones y seguridad/integración final. La cobertura visual global permanece parcial; las previews nuevas no se consideran inspeccionadas.
+
+### API local en Android 17 (debug)
+
+La API debug utiliza `http://10.0.2.2:8000/`. Una instalación nueva puede requerir conceder nuevamente el permiso de red local, declarado exclusivamente en debug:
+
+```powershell
+& "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" -s emulator-5554 shell pm grant com.upchiapas.fittrack android.permission.ACCESS_LOCAL_NETWORK
+```
+
+Sustituye `emulator-5554` por el identificador real de `adb devices`. Release conserva HTTPS obligatorio.

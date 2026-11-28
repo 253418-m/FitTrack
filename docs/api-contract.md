@@ -1,5 +1,7 @@
 # Contrato REST de FitTrack
 
+**Estado vigente R1–R2 · FitTrack Gym v6.0 (27-11-2026):** alcance aprobado por el usuario y aclaraciones docentes aportadas por él. Sustituye expresamente las reglas incompatibles v5.1 de registro libre/selección de rol, cinco hábitos/meta 3 de 5 y cumplimiento manual de pasos. Las secciones previas incompatibles se conservan como evidencia histórica, sin vigencia normativa. No se atribuye una inspección nueva de material docente. Implementación actual: autenticación e invitaciones; procesos de negocio, Room, FCM, hardware, Contactame y HTTPS siguen pendientes.
+
 **Estado vigente 03.R.4 (27-11-2026):** alcance v5.1 aprobado expresamente por el usuario mediante D01–D11, registradas en [decisiones](decisions.md). Las menciones anteriores a aprobación pendiente de esas decisiones son históricas y quedan sustituidas por este registro. Funcionalidades futuras: PLANNED; aprobación de alcance no acredita implementación, pruebas ni aprobación docente. Cobertura visual global parcial; verificaciones externas pendientes.
 
 **Estado:** `GET /health` → 200 `{"status":"ok"}` continúa midiendo solo el proceso FastAPI. En etapa 03 están implementados `POST /api/v1/auth/register`, `POST /api/v1/auth/login` y `GET /api/v1/users/me`; su validación PostgreSQL y HTTP local aprobó en bases exclusivas FitTrack. Las demás rutas de la tabla siguen planificadas bajo `/api/v1`.
@@ -102,3 +104,13 @@ No existe endpoint público para enviar notificaciones arbitrarias. Los dos endp
 No hay claves, tokens ni contraseñas reales en estos ejemplos. `GET /health` no prueba PostgreSQL. Las rutas futuras no aparecen actualmente en OpenAPI.
 
 **D04 aprobada:** DELETE elimina físicamente el registro diario propio tras confirmación y control optimista. Para evitar ABA al borrar y recrear, las mutaciones deben comparar identidad de instancia del registro (UUID no reutilizable) y versión; una recreación obtiene UUID nuevo, y una petición con identidad antigua devuelve 409. No reiniciar una versión como única prueba de identidad. El detalle técnico deberá concretarse y probarse en 11.A antes de implementar, sin cambiar auth existente.
+
+## Contrato vigente v6.0 · registro por invitación (IMPLEMENTED)
+
+Esta sección sustituye el cuerpo de registro libre descrito históricamente. POST /api/v1/auth/register recibe exclusivamente:
+```json
+{"name":"Persona de prueba","username":"persona_demo","email":"demo@example.com","password":"solo-ejemplo-no-operativo","password_confirmation":"solo-ejemplo-no-operativo","invitation_code":"codigo-ilustrativo-no-valido"}
+```
+Se conservan validaciones de identidad y contraseña. invitation_code: 16–128 caracteres, secreto individual; Android lo conserva solo en memoria. role se rechaza como campo extra (422); el rol procede de la invitación. Éxito 201 con access_token/token_type/expires_in/user sin cambios. Código incorrecto/expirado/revocado/consumido: 400 INVALID_INVITATION genérico. Cupo agotado/reducido: 409 GYM_CAPACITY_REACHED. Se preservan 409 de unicidad, 422, 503 y envoltura error. Login y /users/me mantienen rutas/cuerpos; cuenta inactiva recibe el mismo 401 genérico que credenciales/token inválidos. No se añaden rutas administrativas HTTP.
+
+Contratos futuros PLANNED: catálogo filtra TRAINER activo; asignación incluye scheduled_date y unicidad (athlete_id, scheduled_date); cumplimiento se autoriza por atleta asignado y se consulta por propietario entrenador. P03 recibirá solo los tres hábitos editables water/sleep/stretch, más observación de pasos por vía específica; walk_completed será derivado, nunca booleano editable. Endpoints/payload exactos de rutinas/cumplimiento/observaciones deben cerrarse en sus bloques antes de implementarse; los cuerpos v5.1 de cinco booleanos quedan históricos. Sin hardware no hay cumplimiento manual del objetivo de pasos.

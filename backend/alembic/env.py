@@ -3,6 +3,7 @@ from sqlalchemy import create_engine, pool
 
 from app.core.config import get_settings
 from app.db.base import Base
+from app.invitations import model as invitation_model
 from app.users import model  # Register model metadata
 
 config = context.config
@@ -26,6 +27,12 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
+    supplied = config.attributes.get('connection')
+    if supplied is not None:
+        context.configure(connection=supplied, target_metadata=target_metadata, compare_type=True)
+        with context.begin_transaction():
+            context.run_migrations()
+        return
     engine = create_engine(get_url(), poolclass=pool.NullPool, hide_parameters=True)
     try:
         with engine.connect() as connection:
