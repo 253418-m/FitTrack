@@ -48,13 +48,13 @@ def test_registration_normalizes_identifiers_without_changing_password() -> None
         email="  ATLETA@EXAMPLE.COM ",
         password="  contraseña válida  ",
         password_confirmation="  contraseña válida  ",
-        role="ATHLETE",
+        invitation_code="unit-test-invitation-code",
     )
     assert data.name == "María López"
     assert data.username == "atleta.demo_1"
     assert str(data.email) == "atleta@example.com"
     assert data.password == "  contraseña válida  "
-    assert data.role is UserRole.ATHLETE
+    assert data.invitation_code == "unit-test-invitation-code"
 
 
 @pytest.mark.parametrize(
@@ -78,7 +78,7 @@ def test_registration_rejects_invalid_or_private_fields(changes: dict[str, str])
         "email": "atleta@example.com",
         "password": "contraseña-de-prueba",
         "password_confirmation": "contraseña-de-prueba",
-        "role": "ATHLETE",
+        "invitation_code": "unit-test-invitation-code",
     }
     payload.update(changes)
     with pytest.raises(ValidationError):
@@ -219,12 +219,15 @@ def test_openapi_has_only_current_business_routes() -> None:
         ("users_email_key", "EMAIL_CONFLICT"),
     ],
 )
-def test_registration_rolls_back_after_unique_conflict(constraint: str, code: str) -> None:
+def test_registration_rolls_back_after_unique_conflict(constraint: str, code: str, monkeypatch) -> None:
     class FailingSession:
         rolled_back = False
 
         def add(self, user: User) -> None:
             self.user = user
+
+        def flush(self) -> None:
+            pass
 
         def commit(self) -> None:
             original = SimpleNamespace(diag=SimpleNamespace(constraint_name=constraint))
@@ -233,11 +236,12 @@ def test_registration_rolls_back_after_unique_conflict(constraint: str, code: st
         def rollback(self) -> None:
             self.rolled_back = True
 
+    monkeypatch.setattr("app.auth.service.invitation_for_registration", lambda *args: SimpleNamespace(role="ATHLETE"))
     session = FailingSession()
     data = RegisterRequest(
         name="Prueba", username="unique_user", email="unique@example.com",
         password="contraseña-larga", password_confirmation="contraseña-larga",
-        role="ATHLETE",
+        invitation_code="unit-test-invitation-code",
     )
     with pytest.raises(ApiError) as error:
         register(session, data, _settings())

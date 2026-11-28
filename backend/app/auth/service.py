@@ -10,7 +10,8 @@ from app.core.security import (
     verify_missing_user_password,
     verify_password,
 )
-from app.users.model import User
+from app.invitations.service import invitation_for_registration
+from app.users.model import User, utc_now
 from app.users.repository import add_user, get_by_email
 
 
@@ -20,15 +21,16 @@ def session_response(user: User, settings: Settings) -> SessionResponse:
 
 
 def register(db: Session, data: RegisterRequest, settings: Settings) -> SessionResponse:
-    user = User(
-        name=data.name,
-        username=data.username,
-        email=str(data.email),
-        password_hash=hash_password(data.password),
-        role=data.role.value,
-    )
-    add_user(db, user)
     try:
+        invitation = invitation_for_registration(db, data.invitation_code, settings)
+        user = User(
+            name=data.name, username=data.username, email=str(data.email),
+            password_hash=hash_password(data.password), role=invitation.role, is_active=True,
+        )
+        add_user(db, user)
+        db.flush()
+        invitation.consumed_at = utc_now()
+        invitation.consumed_by = user.id
         db.commit()
     except IntegrityError as exc:
         db.rollback()
@@ -38,6 +40,9 @@ def register(db: Session, data: RegisterRequest, settings: Settings) -> SessionR
         if constraint == "users_username_key":
             raise ApiError(409, "USERNAME_CONFLICT", "El username ya está registrado.") from None
         raise ApiError(503, "SERVICE_UNAVAILABLE", "Servicio temporalmente no disponible.") from None
+    except ApiError:
+        db.rollback()
+        raise
     except SQLAlchemyError:
         db.rollback()
         raise ApiError(503, "SERVICE_UNAVAILABLE", "Servicio temporalmente no disponible.") from None
@@ -54,7 +59,7 @@ def login(db: Session, data: LoginRequest, settings: Settings) -> SessionRespons
             "Correo o contraseña incorrectos.",
             {"WWW-Authenticate": "Bearer"},
         )
-    if not verify_password(data.password, user.password_hash):
+    if not verify_password(data.password, user.password_hash) or not user.is_active:
         raise ApiError(
             401,
             "INVALID_CREDENTIALS",

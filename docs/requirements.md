@@ -1,5 +1,7 @@
 # Requisitos de FitTrack · alcance v5.1 aprobado
 
+**Estado vigente R1–R2 · FitTrack Gym v6.0 (27-11-2026):** alcance aprobado por el usuario y aclaraciones docentes aportadas por él. Sustituye expresamente las reglas incompatibles v5.1 de registro libre/selección de rol, cinco hábitos/meta 3 de 5 y cumplimiento manual de pasos. Las secciones previas incompatibles se conservan como evidencia histórica, sin vigencia normativa. No se atribuye una inspección nueva de material docente. Implementación actual: autenticación e invitaciones; procesos de negocio, Room, FCM, hardware, Contactame y HTTPS siguen pendientes.
+
 **Estado vigente 03.R.4 (27-11-2026):** alcance v5.1 aprobado expresamente por el usuario mediante D01–D11, registradas en [decisiones](decisions.md). Las menciones anteriores a aprobación pendiente de esas decisiones son históricas y quedan sustituidas por este registro. Funcionalidades futuras: PLANNED; aprobación de alcance no acredita implementación, pruebas ni aprobación docente. Cobertura visual global parcial; verificaciones externas pendientes.
 
 Estado: contrato histórico v5.0 actualizado con propuesta v5.1. La etapa 03, integrada en develop por PR #2, implementó en código el componente backend de RF-01 y RF-02 (registro, login, JWT y usuario actual); su validación backend contra PostgreSQL real y HTTP local aprobó. La integración Android sigue pendiente. RF-03 a RF-05 requieren la etapa Android siguiente, y los demás requisitos siguen planificados. Dos roles registrados libremente: `ATHLETE` y `TRAINER`. Un entrenador admite muchos atletas; cada atleta, como máximo un entrenador activo. Toda autorización remota corresponde a la API.
@@ -155,3 +157,18 @@ Las preferencias o permisos **indispensables** para recibir FCM y asociar/desaso
 **No funcionales:** Kotlin/Compose/Material 3, Navigation Compose, MVVM con dominio sin Android, StateFlow/UiState inmutable, corrutinas, Hilt, Retrofit/Serialization/OkHttp, Room y DataStore; accesibilidad, HTTPS, secretos fuera de Git, pruebas reales y Version Catalog. Proyecto de Cálculo Vectorial no aplica.
 
 **Dependencias y aprobaciones:** 03.R.3 crea wireframes; 04 Android auth; 04.B Contactame; 05–10 P01/P02; 09.B Room; 11.A/B P03; luego FCM, hardware, HTTPS y aceptación. Aprobar P03, Contactame, política offline, riesgo biométrico y prioridades Should antes de implementar.
+
+## Requisitos vigentes v6.0
+
+RF-01 conserva identidad/validaciones, pero exige invitation_code individual; el rol proviene del servidor. RF-08/RF-09 pasan a cuatro hábitos y meta personal 3 de 4; entrenar 30 minutos se sustituye por cumplimiento independiente de la rutina asignada. RF-14 requiere fecha de asignación y unicidad por atleta/fecha. RF-19/RF-20 usan catálogo de entrenadores activos del gimnasio, manteniendo búsqueda username/UUID y vínculo formal. RF-43–RF-45 eliminan toda alternativa manual de pasos: sin sensor/permiso, tarea pendiente con explicación. Los RF anteriores incompatibles quedan históricos, no son criterios actuales.
+
+| ID | Requisito v6.0 | Prioridad / estado |
+|---|---|---|
+| RF-57 | Registro mediante invitación individual válida, rol derivado, código no persistido en Android ni en texto claro en PostgreSQL | Must; IMPLEMENTED, E2E pendiente |
+| RF-58 | CLI privada de capacidad/invitaciones; límites activos y reservas serializados por rol; emisión/revocación/consumo transaccionales | Must; IMPLEMENTED |
+| RF-59 | Desactivar cuenta bloquea login y JWT anterior; revisión de usuarios anteriores sin desactivación automática | Must; IMPLEMENTED |
+| RF-60 | Una rutina asignada por atleta y fecha local de gimnasio; Hoy muestra rutina y hábitos | Must; PLANNED |
+| RF-61 | Atleta confirma cumplimiento de rutina propio; entrenador consulta historial de sus asignaciones, separado de hábitos privados | Must; PLANNED |
+| RF-62 | Servidor deriva walk_completed de observación >=8000; rechaza booleano/entrada manual y evita duplicados de dispositivo/día | Must; PLANNED |
+
+Inventario: RF-01–RF-62 (62 IDs), manteniendo trazabilidad histórica. Rutina no suma un quinto hábito ni modifica la meta personal. Room, FCM, tres hardware, Contactame, HTTPS y pruebas conservan obligatoriedad. Opiniones/puntuaciones Should después del núcleo; fuera de alcance pagos, mensualidades, aforo presencial, chat y múltiples gimnasios.

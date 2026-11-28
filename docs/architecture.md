@@ -1,5 +1,7 @@
 # Arquitectura propuesta
 
+**Estado vigente R1–R2 · FitTrack Gym v6.0 (27-11-2026):** alcance aprobado por el usuario y aclaraciones docentes aportadas por él. Sustituye expresamente las reglas incompatibles v5.1 de registro libre/selección de rol, cinco hábitos/meta 3 de 5 y cumplimiento manual de pasos. Las secciones previas incompatibles se conservan como evidencia histórica, sin vigencia normativa. No se atribuye una inspección nueva de material docente. Implementación actual: autenticación e invitaciones; procesos de negocio, Room, FCM, hardware, Contactame y HTTPS siguen pendientes.
+
 **Estado vigente 03.R.4 (27-11-2026):** alcance v5.1 aprobado expresamente por el usuario mediante D01–D11, registradas en [decisiones](decisions.md). Las menciones anteriores a aprobación pendiente de esas decisiones son históricas y quedan sustituidas por este registro. Funcionalidades futuras: PLANNED; aprobación de alcance no acredita implementación, pruebas ni aprobación docente. Cobertura visual global parcial; verificaciones externas pendientes.
 
 ## Estado real
@@ -125,3 +127,23 @@ flowchart LR
 ```
 
 Backend conserva monolito modular FastAPI existente; no se traslada MVVM al servidor. El backend actual solo tiene users/auth; coaching, rutinas, hábitos, contacto y dispositivos se diseñan para fases futuras. No hay despliegue AWS actual.
+
+## Implementación Android 04.1 · 27-11-2026
+
+Implementada localmente en un módulo: `features/auth/domain` contiene modelos, AuthRepository/SessionRepository y UseCases puros; `data` contiene AuthApi (fuente remota Retrofit), DTOs Serializable, mapeo explícito y AuthRepositoryImpl; `presentation` contiene AuthViewModel/RootViewModel y Screens sin negocio; `di` proporciona dependencias Hilt. Las Routes consumen StateFlow con collectAsStateWithLifecycle y ViewModels mediante hiltViewModel. MainActivity permanece intacta.
+
+La raíz compone exclusivamente el grafo público o el privado por rol. Al cambiar la sesión se descarta el NavController del grafo anterior. No hay destino de rol ajeno ni datos ficticios de negocio. Las contraseñas viven solo en memoria y se descartan al abandonar el formulario; no se usa SavedStateHandle/rememberSaveable para ellas.
+
+`core/network` incorpora origen permitido, Bearer únicamente para recursos privados, sin redirecciones ni reintento automático de POST. No hay logs HTTP sensibles. JSON/error se transforma a errores de dominio sin mostrar mensajes internos. 401 protegido invalida solo la generación que originó la solicitud; 403 no cierra sesión.
+
+`core/session` cifra token y vencimiento AES/GCM con nonce generado por Cipher, clave no exportable Keystore y DataStore. Operaciones de cifrado/almacenamiento en Dispatchers.IO; mutaciones serializadas con Mutex. Una generación impide que una respuesta antigua reactive sesión tras logout o invalide otra cuenta. Un temporizador restringe acceso al vencer expires_in; al restaurar se exige /users/me. Fallo temporal conserva el ciphertext vigente y bloquea la UI privada con reintento/logout. Si falla la limpieza se bloquea la restauración y se reintenta eliminar; primero se invalida la clave para inutilizar residuos cifrados. No existe permiso offline adicional, Room, biometría ni refresh en esta entrega.
+
+Dependencias fijadas y resueltas por Gradle: Retrofit/converter 3.0.0, OkHttp 4.12.0, Serialization JSON 1.8.1/plugin Kotlin 2.2.10, DataStore 1.1.7, Navigation Compose 2.9.0, Lifecycle 2.11.0, Hilt Compose 1.2.0, coroutines-test 1.10.2. Se conserva AGP con Kotlin integrado, KSP y Hilt existentes. Release sin URL configurada queda bloqueada antes del envío; HTTPS y URL pública siguen pendientes.
+
+## Adaptación R1–R2 v6.0
+
+Se reutilizan las capas Android 04.1 y sesión cifrada. RegisterInput/DTO usan invitationCode/invitation_code; desaparece el selector de rol y la API sigue siendo autoridad de navegación. El código solo vive en el estado en memoria del formulario, nunca en DataStore/SavedStateHandle ni logs. Errores de invitación/capacidad se mapean a dominio y español.
+
+Backend incorpora modelo/service de invitaciones y CLI privada app.gym_admin, sin endpoints admin ni tercer rol móvil. Hash SHA-256 de códigos aleatorios secrets.token_urlsafe(32) (256 bits); emisión después de commit muestra el código una sola vez al operador. Bloqueos PostgreSQL pg_advisory_xact_lock de claves estables por rol se comparten entre emisión, consumo, revocación y desactivación. Todas las herramientas que muten capacidad deberán respetarlos. Capacidad = límite - activos - invitaciones vigentes no consumidas/no revocadas; vencidas no reservan. Configuración de límites en entorno privado del servidor.
+
+Próximo bloque de pasos: SensorManager/TYPE_STEP_COUNTER → callbackFlow/trySend/awaitClose en DataSource → RepositoryImpl → UseCase → ViewModel. Mantener baseline por cuenta/dispositivo/día y reinicio, acumulación diaria y observaciones idempotentes, sincronizando solo día actual con sesión válida. Observación offline no equivale a confirmación remota; sin permisos/sensor queda pendiente. No hay entrada manual ni garantía de seguimiento 24 h o antifraude absoluto.

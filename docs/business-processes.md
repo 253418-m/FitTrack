@@ -1,5 +1,7 @@
 # Procesos de negocio · FitTrack v5.1 aprobado
 
+**Estado vigente R1–R2 · FitTrack Gym v6.0 (27-11-2026):** alcance aprobado por el usuario y aclaraciones docentes aportadas por él. Sustituye expresamente las reglas incompatibles v5.1 de registro libre/selección de rol, cinco hábitos/meta 3 de 5 y cumplimiento manual de pasos. Las secciones previas incompatibles se conservan como evidencia histórica, sin vigencia normativa. No se atribuye una inspección nueva de material docente. Implementación actual: autenticación e invitaciones; procesos de negocio, Room, FCM, hardware, Contactame y HTTPS siguen pendientes.
+
 **Estado vigente 03.R.4 (27-11-2026):** alcance v5.1 aprobado expresamente por el usuario mediante D01–D11, registradas en [decisiones](decisions.md). Las menciones anteriores a aprobación pendiente de esas decisiones son históricas y quedan sustituidas por este registro. Funcionalidades futuras: PLANNED; aprobación de alcance no acredita implementación, pruebas ni aprobación docente. Cobertura visual global parcial; verificaciones externas pendientes.
 
 **Estado:** alcance aprobado por el usuario el 27-11-2026; P01–P03 planificados. [Requisitos](requirements.md) · [Historias](user-stories.md) · [API](api-contract.md). Ningún proceso está implementado de extremo a extremo: Android aún presenta la identidad temporal. Los datos de cada proceso procederán de la API propia y PostgreSQL. Carga, vacío, error y reintento son estados obligatorios; un éxito visual exige confirmación del servidor.
@@ -95,3 +97,55 @@ flowchart TD
 ```
 
 **Revisión 03.R.2.1:** P03 distingue día ausente (200 con `exists:false`), creación con versión esperada nula, PUT completo con versión, consulta histórica y DELETE explícito con versión; el borrado recalcula rachas. El servidor no suma observaciones de pasos de varios dispositivos. En P02, la antigüedad de la copia no otorga autorización: solo hay lectura offline con sesión protegida, JWT vigente y última autorización conocida; la expiración bloquea el detalle. FCM puede fallar o retrasarse sin invalidar un vínculo o rutina ya confirmados. Véase [contrato API](api-contract.md).
+
+## Procesos rectores v6.0
+
+### P01 · Selección y vinculación
+Atleta invitado/autenticado consulta catálogo de entrenadores activos del único gimnasio, selecciona por username/UUID y envía solicitud; entrenador activo acepta/rechaza; ambos consultan/cancelan/finalizan conforme a propiedad. Máximo un vínculo activo por atleta. Persistencia futura trainer_requests/trainer_athletes. Sin chat, grupos ni cuentas ADMIN móviles. Errores: cuenta inactiva/401, entrenador inactivo/no encontrado, vínculo existente, duplicado/409, prohibido/403 y fallo de red con reintento. Push informa, no condiciona la transacción. HU08–HU13, HU23, HU31–HU34; pruebas de propiedad, concurrencia, catálogo activo y ausencia de datos privados. Estado PLANNED; solo prerequisito auth/invitaciones implementado.
+```mermaid
+flowchart TD
+ A[Atleta autenticado] --> B[Consultar catálogo activo]
+ B --> C{Entrenador disponible y sin vínculo?}
+ C -->|No| X[Informar vacío o conflicto]
+ C -->|Sí| D[Persistir solicitud]
+ D --> E{Entrenador decide}
+ E -->|Rechaza| F[Persistir rechazo]
+ E -->|Acepta| G{Reglas aún válidas?}
+ G -->|No| X
+ G -->|Sí| H[Crear vínculo atómico]
+ H --> I[Consultar o finalizar vínculo]
+```
+
+### P02 · Gestión de rutinas diarias
+Entrenador propietario selecciona atleta vinculado activo y fecha; crea rutina/ejercicios, consulta historial de sus asignaciones y edita/elimina según política vigente. Unicidad (atleta, fecha) validada en PostgreSQL; conflicto concurrente 409. Atleta recibe aviso y consulta su rutina diaria en Hoy/Detalle; Room mantiene copia autorizada de solo lectura, con JWT vigente y revalidación al reconectar. Recursos futuros routines/exercises; eventos ROUTINE_ASSIGNED. HU14–HU17/HU27/HU30/HU35/HU36, RF-60/RF-61. Precondiciones: sesión, roles y vínculo; postcondición: asignación confirmada. Sin vínculo, cuenta inactiva, fecha inválida, recurso ajeno, sesión expirada o red fallida no producen éxito ficticio. Estado PLANNED; pruebas de unicidad, fechas, CRUD, propiedad y cache.
+```mermaid
+flowchart TD
+ A[Entrenador selecciona atleta y fecha] --> B{Vínculo activo y datos válidos?}
+ B -->|No| X[Informar error]
+ B -->|Sí| C{Existe rutina ese día?}
+ C -->|Sí| D[Consultar o editar propia]
+ C -->|No| E[Crear rutina y ejercicios]
+ E --> F{Commit correcto?}
+ F -->|No| X
+ F -->|Sí| G[Atleta consulta en Hoy y Room]
+ D --> H[Consultar historial propio]
+ G --> H
+```
+
+### P03 · Cumplimiento y seguimiento
+Atleta consulta Hoy con rutina diaria y cuatro hábitos: agua (8 vasos), caminar (8000 pasos), sueño (7 h) y estirar (10 min). Marca/corrige solo agua/sueño/estiramiento. Seguimiento activo observa pasos y sincroniza día actual idempotentemente con sesión válida; servidor deriva walk_completed. Rutina tiene cumplimiento independiente y no suma un hábito. Meta personal >=3 de4; rachas se derivan de hábitos confirmados y se recalculan ante corrección/DELETE confirmado conforme D04. Hábitos privados, entrenador solo consulta historial de sus rutinas. Sin sensor/permiso, caminar queda pendiente sin alternativa manual. Sin red solo observación local, nunca cambio confirmado. Recursos futuros daily_habits/routine_completions/routines; contratos detallados pendientes. HU18–HU21/HU25/HU26/HU35/HU36, RF-60–RF-62. Pruebas: propiedad, fechas, conflictos, duplicados de observación, reinicio/dispositivo y meta separada. Estado PLANNED; hardware no implementado en R1–R2.
+```mermaid
+flowchart TD
+ A[Consultar Hoy] --> B[Obtener rutina y hábitos confirmados]
+ B --> C{Tipo de avance}
+ C -->|Personal editable| D[Enviar agua sueño o estiramiento]
+ C -->|Pasos| E{Sensor permiso y sesión válidos?}
+ E -->|No| X[Mostrar limitación y pendiente]
+ E -->|Sí| F[Observar y sincronizar sin duplicar]
+ C -->|Rutina| G[Confirmar cumplimiento propio]
+ D --> H{Servidor confirma?}
+ F --> H
+ G --> H
+ H -->|No| I[Conservar último estado y permitir reintento]
+ H -->|Sí| J[Actualizar meta 3 de4 y rutina por separado]
+```

@@ -1,5 +1,7 @@
 # Backend local de FitTrack
 
+**Estado vigente R1–R2 · FitTrack Gym v6.0 (27-11-2026):** alcance aprobado por el usuario y aclaraciones docentes aportadas por él. Sustituye expresamente las reglas incompatibles v5.1 de registro libre/selección de rol, cinco hábitos/meta 3 de 5 y cumplimiento manual de pasos. Las secciones previas incompatibles se conservan como evidencia histórica, sin vigencia normativa. No se atribuye una inspección nueva de material docente. Implementación actual: autenticación e invitaciones; procesos de negocio, Room, FCM, hardware, Contactame y HTTPS siguen pendientes.
+
 **Estado vigente 03.R.4 (27-11-2026):** alcance v5.1 aprobado expresamente por el usuario mediante D01–D11, registradas en [decisiones](../docs/decisions.md). Las menciones anteriores a aprobación pendiente de esas decisiones son históricas y quedan sustituidas por este registro. Funcionalidades futuras: PLANNED; aprobación de alcance no acredita implementación, pruebas ni aprobación docente. Cobertura visual global parcial; verificaciones externas pendientes.
 
 **Estado de etapa 03:** backend implementado, validado localmente e integrado en `develop` mediante PR #2. `GET /health` sigue comprobando solo el proceso. Las rutas de autenticación y la migración se validaron sobre PostgreSQL 18.6.
@@ -75,3 +77,26 @@ La evidencia técnica redactada se guardó localmente en el directorio hermano `
 ## Estado de integración y alcance documental v5.1
 
 La etapa 03 quedó integrada en `develop` mediante [PR #2](https://github.com/253418-m/FitTrack/pull/2), merge `12df7874276bece8e682a5540806238f2145fff1`. El backend implementado conserva solo `GET /health`, `POST /api/v1/auth/register`, `POST /api/v1/auth/login` y `GET /api/v1/users/me`. Las rutas de [contrato futuro](../docs/api-contract.md) están etiquetadas como planificadas o propuestas y no aparecen aún en Swagger. Room será una copia local Android de rutinas, con PostgreSQL como fuente de verdad; no requiere cambios en el backend de autenticación ya validado. Esta actualización documental no ejecutó pruebas nuevas ni despliegue.
+
+## FitTrack Gym v6.0 · invitaciones y operador
+
+Migración nueva a600invites01 sobre bd7cce2c8602. Aplicada solo en fittrack_test; fittrack_dev permanece sin migrar y requiere autorización posterior antes de usar registro v6.0. Mantener copia de seguridad y revisar despliegue antes de migrar desarrollo. No ejecutar downgrade destructivo sobre datos existentes.
+
+Desde backend, CLI privada disponible (no HTTP admin):
+```powershell
+.\.venv\Scripts\python.exe -m app.gym_admin capacity --role ATHLETE
+.\.venv\Scripts\python.exe -m app.gym_admin capacity --role TRAINER
+.\.venv\Scripts\python.exe -m app.gym_admin invite --role ATHLETE
+.\.venv\Scripts\python.exe -m app.gym_admin invite --role TRAINER
+.\.venv\Scripts\python.exe -m app.gym_admin list
+.\.venv\Scripts\python.exe -m app.gym_admin legacy-users
+.\.venv\Scripts\python.exe -m app.gym_admin revoke <UUID>
+.\.venv\Scripts\python.exe -m app.gym_admin deactivate <UUID>
+```
+Los UUID son marcadores; no ejecutar literalmente. invite muestra el código real una sola vez al operador después del commit: no capturarlo en logs compartidos. list muestra identificadores/rol/fechas de estado, nunca códigos ni hashes. Proteger acceso al servidor, entorno y salida del terminal. No hay contraseña o token nuevo versionado. Variables privadas opcionales: GYM_ATHLETE_LIMIT=100, GYM_TRAINER_LIMIT=10, INVITATION_EXPIRE_HOURS=48. La herramienta usa DATABASE_URL: no usarla en desarrollo hasta autorizar/aplicar migración. legacy-users identifica cuentas sin invitación consumida para revisión manual; no las modifica.
+
+Consulta de solo lectura confirmó desarrollo en bd7cce2c8602 con dos cuentas previas (1 ATHLETE y 1 TRAINER). No se desactivaron ni migraron. La nueva columna tendrá DEFAULT true para preservar acceso; esas cuentas cuentan contra capacidad. Desactivar no borra datos ni revoca criptográficamente JWT, pero /me y dependencias vuelven a consultar is_active y bloquean sus recursos privados. Futuras relaciones/rutinas deben filtrar inactivos y definir retiro de acceso/retención antes de implementar.
+
+## Estado vigente R2.1 · 28-11-2026
+
+Se autorizó y aplicó a600invites01 en fittrack_dev tras respaldo pg_dump verificado y restringido, sin alterar los dos usuarios previos. Las menciones R1–R2 a migración de desarrollo pendiente son históricas. HTTP y CLI reales pasaron; E2E Android permanece bloqueado por superficie negra en emulator-5554. Ver [evidencia R2.1](../docs/course-coverage.md). No se declara listo para versionado.

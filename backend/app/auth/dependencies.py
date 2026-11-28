@@ -28,7 +28,7 @@ def get_current_user(
     except (InvalidTokenError, ValueError, TypeError, KeyError):
         raise ApiError(401, "UNAUTHENTICATED", "Token inválido o expirado.", {"WWW-Authenticate": "Bearer"}) from None
     user = get_by_id(db, user_id)
-    if user is None:
+    if user is None or not user.is_active:
         raise ApiError(401, "UNAUTHENTICATED", "Token inválido o expirado.", {"WWW-Authenticate": "Bearer"})
     return user
 

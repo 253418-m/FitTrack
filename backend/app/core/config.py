@@ -11,6 +11,9 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
+    gym_athlete_limit: int = Field(default=100, ge=1)
+    gym_trainer_limit: int = Field(default=10, ge=1)
+    invitation_expire_hours: int = Field(default=48, ge=1, le=8760)
     app_env: str = "development"
     database_url: SecretStr
     test_database_url: SecretStr | None = None

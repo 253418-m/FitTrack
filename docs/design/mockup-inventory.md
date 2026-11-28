@@ -1,5 +1,7 @@
 # Inventario de mockups aprobados v5.0 y FitTrack v5.1 aprobado
 
+**Estado vigente R1–R2 · FitTrack Gym v6.0 (27-11-2026):** alcance aprobado por el usuario y aclaraciones docentes aportadas por él. Sustituye expresamente las reglas incompatibles v5.1 de registro libre/selección de rol, cinco hábitos/meta 3 de 5 y cumplimiento manual de pasos. Las secciones previas incompatibles se conservan como evidencia histórica, sin vigencia normativa. No se atribuye una inspección nueva de material docente. Implementación actual: autenticación e invitaciones; procesos de negocio, Room, FCM, hardware, Contactame y HTTPS siguen pendientes.
+
 **Estado vigente 03.R.4 (27-11-2026):** alcance v5.1 aprobado expresamente por el usuario mediante D01–D11, registradas en [decisiones](../decisions.md). Las menciones anteriores a aprobación pendiente de esas decisiones son históricas y quedan sustituidas por este registro. Funcionalidades futuras: PLANNED; aprobación de alcance no acredita implementación, pruebas ni aprobación docente. Cobertura visual global parcial; verificaciones externas pendientes.
 
 Referencia principal local (fuera del repositorio): `MockupsFitTrack.pdf` en el directorio hermano `FitTrack-references`. Contiene **27 páginas**, **24 vistas únicas**, dos variantes adicionales (páginas 1 y 5) y una página de cinco ejemplos de notificaciones (página 25). Las exportaciones `mockups/svg/` y `mockups/png/` están disponibles en el mismo directorio. Estos archivos no se versionan ni se usan como pantallas de producción.
@@ -182,3 +184,27 @@ Las 26 HU Must siguen mapeadas. HU18 pasa de MISSING a **PARTIAL**: ya existen e
 | Permiso FCM y destino protegido · HU23 | PARTIAL | Lámina original cubre cuatro eventos; falta referencia de permiso y sesión expirada al abrir destino. |
 
 La cobertura visual global permanece **PARCIAL**. Los componentes reutilizables resuelven forma de presentación, no acreditan ejecución ni sustituyen las pruebas de autorización, persistencia o hardware.
+
+## Aplicación de referencias a 04.1 · 27-11-2026
+
+Se consultaron visualmente solo estos PNG externos: `mockups/png/01. Inicio de sesión.png`, `02. Registro.png`, `03. Hoy - Atleta.png`, `07. Mis rutinas - Entrenador.png`, `19. Configuración general.png`; y `mockups-v5.1/png/01. Variantes - Autenticación y Acceso.png`, `19.B Configuración - Entrenador.png`. No se copiaron al repositorio ni se reabrieron otras referencias.
+
+Composiciones en AuthScreens: Login inicial/carga/error, Registro 409/422, restauración, conexión/reintento, expiración offline y confirmación de logout. Se renderizaron e inspeccionaron previews de todos esos estados salvo LogoutPreview, cuyo renderizador no produjo imagen. El diálogo se verificó mediante prueba instrumentada de navegación en emulador; su inspección visual final queda para 04.2. Los formularios son desplazables y usan componentes existentes; la aceptación en dispositivo pequeño/teclado sigue pendiente.
+
+Los destinos Hoy/Rutinas/Configuración son contenedores iniciales con identidad real: no representan hábitos, rutinas ni preferencias implementados. Se omite biometría y recuperación de contraseña operativas. Ajustes conserva únicamente identidad/rol y logout de esta etapa. Se mantiene la cobertura visual global parcial, las 25 vistas únicas y los 17 pares externos; previews no incrementan ese inventario.
+
+## Brechas v6.0 R1–R2
+
+No se reinspeccionaron los 25 mockups. Se renderizó la nueva GymRegisterPreview basada en componentes existentes: marca FitTrack Gym, campo invitación y ausencia de selector de rol. El contrato prevalece sobre referencias antiguas con selección libre. Errores invitación/cupo reutilizan el componente de error; validación visual completa en dispositivo pendiente.
+
+Referencias futuras necesarias: catálogo activo del gimnasio; Hoy con rutina diaria y cuatro hábitos/meta 3/4; cumplimiento independiente de rutina; historial del entrenador; pasos sin entrada manual y estados sensor/permiso/observación pendiente/confirmado. Son cambios/variantes por diseñar, no nuevas pantallas ya disponibles. Inventario histórico de 25 vistas y 17 pares no acredita estas brechas ni se incrementa por la preview.
+
+## Evidencia R2.1 · 28-11-2026
+
+APK real en emulator-5554: jerarquía de Login presente, capturas negras y navegación de entrada sin respuesta observada. Las imágenes externas 01-login.png y diagnostico-login-negro.png son diagnóstico, no referencias funcionales aprobadas. No se obtuvieron capturas válidas de registro, destinos por rol, error o logout. Cobertura visual parcial preservada; las previews R2 no sustituyen el E2E bloqueado. Causa app/emulador pendiente de diagnóstico, sin cambios especulativos al sistema visual. Ver [matriz E01–E12](../course-coverage.md).
+
+## R2.2 — Validación de autenticación (2026-11-28)
+
+El usuario reportó como satisfactorios los registros de Carlos (atleta) y Luis (entrenador), destinos Hoy/Mis rutinas, login de ambos roles, restauración de sesión vigente, logout con protección del back stack, logout sin conexión y aislamiento entre cuentas. Es evidencia manual reportada por el usuario, no una ejecución automatizada. R2.1.1 verificó HTTP Android 401/201/200 y confirmó el bloqueo de red local de Android 17 mediante revocación/concesión controlada del permiso debug.
+
+Pendientes: errores E2E restantes, regresión instrumentada del manifiesto final, 403 en recursos de negocio, limpieza futura Room/FCM/hardware, biometría, HTTPS AWS, revisión de cuentas anteriores a invitaciones y seguridad/integración final. La cobertura visual global permanece parcial; las previews nuevas no se consideran inspeccionadas.
